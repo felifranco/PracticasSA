@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro2-deployment
+  labels:
+    app: micro2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: micro2
+  template:
+    metadata:
+      labels:
+        app: micro2
+    spec:
+      containers:
+        - name: micro2
+          image: f64franco/micro2:practica2
+          ports:
+            - containerPort: 3000
+          env:
+            - name: HOST
+              value: "192.168.0.9"
+            - name: PORT
+              value: "3000"

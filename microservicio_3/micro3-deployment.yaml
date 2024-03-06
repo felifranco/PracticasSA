@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro3-deployment
+  labels:
+    app: micro3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: micro3
+  template:
+    metadata:
+      labels:
+        app: micro3
+    spec:
+      containers:
+        - name: micro3
+          image: f64franco/micro3:practica2
+          ports:
+            - containerPort: 3000
+          env:
+            - name: HOST
+              value: "192.168.0.9"
+            - name: PORT
+              value: "3000"
+            - name: MICRO1_URL
+              value: "192.168.0.9"
+            - name: MICRO2_URL
+              value: "192.168.0.9"
