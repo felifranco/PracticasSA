@@ -1,0 +1,24 @@
+const express = require("express");
+require('dotenv').config()
+const app = express();
+const host = process.env.HOST;
+const port = process.env.PORT;
+
+// Endpoint para obtener datos
+app.get("/", (req, res) => {
+  fetch("http:localhost:3001?name=" + req.query.name)
+    .then((response) => response.json())
+    .then((data) => {
+      res.send(data);
+    });
+
+  fetch("http:localhost:3002?name=" + req.query.name)
+    .then((response) => response.json())
+    .then((data) => {
+      res.send(data);
+    });
+});
+
+app.listen(port, host, () => {
+  console.log(`Server running at http://${host}:${port}/`);
+});
