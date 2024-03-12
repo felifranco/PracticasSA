@@ -1,16 +1,26 @@
 const express = require("express");
 require("dotenv").config();
 const app = express();
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
+
 const host = process.env.HOST;
 const port = process.env.PORT;
 const micro1Url = process.env.MICRO1_URL;
 const micro2Url = process.env.MICRO2_URL;
 
+const docs = "/api";
+app.use(docs, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 // Endpoint para obtener datos
 app.get("/", async (req, res) => {
   const name = req.query.name;
   if (!name) {
-    res.send({ message: "No se envió el parámetro 'name' en la URL" });
+    return res
+      .status(400)
+      .send(
+        `Le hace falta un parámetro, revise la documentación en http://${host}:${port}${docs}/`
+      );
   }
   console.log(name);
 
@@ -35,5 +45,7 @@ app.get("/", async (req, res) => {
 });
 
 app.listen(port, host, () => {
-  console.log(`Server running at http://${host}:${port}/`);
+  console.log(
+    `\nServer running at http://${host}:${port}/.\nSee the documentation at http://${host}:${port}${docs}`
+  );
 });

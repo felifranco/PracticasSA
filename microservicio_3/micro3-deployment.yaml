@@ -21,10 +21,10 @@ spec:
             - containerPort: 3000
           env:
             - name: HOST
-              value: "192.168.0.9"
+              value: "0.0.0.0"
             - name: PORT
               value: "3000"
             - name: MICRO1_URL
-              value: "192.168.0.9"
+              value: "http://192.168.49.2:30102"
             - name: MICRO2_URL
-              value: "192.168.0.9"
+              value: "http://192.168.49.2:30802"
