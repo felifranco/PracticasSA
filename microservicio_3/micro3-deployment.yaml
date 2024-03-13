@@ -25,6 +25,6 @@ spec:
             - name: PORT
               value: "3000"
             - name: MICRO1_URL
-              value: "http://192.168.49.2:30102"
+              value: "http://micro1-service"
             - name: MICRO2_URL
-              value: "http://192.168.49.2:30802"
+              value: "http://micro2-service"
