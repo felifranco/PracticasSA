@@ -1,5 +1,9 @@
 # Práctica 2 - Software avanzado
 
+## Arquitectura
+
+![Arquitectura](./assets/Practica%202%20-%20SA.png)
+
 ## Creación de los microservicios
 
 A cada microservicio ejecutarle:
