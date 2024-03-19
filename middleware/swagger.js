@@ -6,7 +6,7 @@ const port = process.env.PORT;
 
 const doc = {
   info: {
-    title: "Microservicio 3",
+    title: "Middleware",
     description: `'Se consumen el microservicio 1 y microservicio 2'`,
   },
   host: `${host}:${port}`,

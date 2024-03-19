@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: micro3-deployment
+  name: middleware-deployment
   labels:
-    app: micro3
+    app: middleware
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: micro3
+      app: middleware
   template:
     metadata:
       labels:
-        app: micro3
+        app: middleware
     spec:
       containers:
-        - name: micro3
-          image: f64franco/micro3:practica2
+        - name: middleware
+          image: f64franco/middleware:practica2
           ports:
             - containerPort: 3000
           env:

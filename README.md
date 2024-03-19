@@ -218,11 +218,11 @@ kubectl apply -f micro2-deployment.yaml
 kubectl apply -f micro2-service.yaml
 ```
 
-- Microservicio 1
+- Middleware
 
 ```shell
-kubectl apply -f micro3-deployment.yaml
-kubectl apply -f micro3-service.yaml
+kubectl apply -f middleware-deployment.yaml
+kubectl apply -f middleware-service.yaml
 ```
 
 - Esperar hasta que aparezca la IP pública
