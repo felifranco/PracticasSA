@@ -6,7 +6,7 @@ const port = process.env.PORT;
 
 const doc = {
   info: {
-    title: "Microservicio 1",
+    title: "Microservicio Agify",
     description:
       'Se consume el servicio https://api.agify.io/ reenviando el parámetro "name"',
   },
