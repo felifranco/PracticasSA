@@ -6,7 +6,7 @@ const port = process.env.PORT;
 
 const doc = {
   info: {
-    title: "Microservicio 2",
+    title: "Microservicio Genderize",
     description:
       'Se consume el servicio https://api.genderize.io/ reenviando el parámetro "name"',
   },

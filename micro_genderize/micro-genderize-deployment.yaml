@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: micro2-deployment
+  name: micro-genderize-deployment
   labels:
-    app: micro2
+    app: micro-genderize
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: micro2
+      app: micro-genderize
   template:
     metadata:
       labels:
-        app: micro2
+        app: micro-genderize
     spec:
       containers:
-        - name: micro2
-          image: f64franco/micro2:practica2
+        - name: micro-genderize
+          image: f64franco/micro-genderize:practica2
           ports:
             - containerPort: 3000
           env:
