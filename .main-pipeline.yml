@@ -1,23 +1,24 @@
 stages:
-  - triggers
+  - microservices
 
-trigger_agify:
-  stage: triggers
+micro_agify:
+  stage: microservices
   trigger:
     include: micro_agify/.agify-pipeline.yml
   rules:
     - changes:
         - micro_agify/*
 
-trigger_genderize:
-  stage: triggers
+micro_genderize:
+  stage: microservices
   trigger:
     include: micro_genderize/.genderize-pipeline.yml
   rules:
     - changes:
         - micro_genderize/*
-trigger_middleware:
-  stage: triggers
+
+micro_middleware:
+  stage: microservices
   trigger:
     include: middleware/.middleware-pipeline.yml
   rules:
