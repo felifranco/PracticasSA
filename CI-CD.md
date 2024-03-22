@@ -10,6 +10,10 @@ https://docs.gitlab.com/ee/ci/pipelines/pipeline_architectures.html#basic-pipeli
 
 https://docs.gitlab.com/ee/ci/yaml/index.html#stages
 
+https://docs.gitlab.com/ee/ci/variables/
+
+https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
+
 ```yml
 # This file is a template, and might need editing before it works on your project.
 # To contribute improvements to CI/CD templates, please follow the Development guide at:
