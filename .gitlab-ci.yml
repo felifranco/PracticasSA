@@ -12,10 +12,10 @@ trigger_agify:
 trigger_genderize:
   stage: triggers
   trigger:
-    include: micro-genderize/.genderize-pipeline.yml
+    include: micro_genderize/.genderize-pipeline.yml
   rules:
     - changes:
-        - micro-genderize/*
+        - micro_genderize/*
 trigger_middleware:
   stage: triggers
   trigger:
