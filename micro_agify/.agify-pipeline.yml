@@ -12,7 +12,7 @@ build_agify:
     - echo "Variables are '$CI_REGISTRY_IMAGE' and '$CI_COMMIT_REF_SLUG'"
     - echo "Variables2 are '$CI_REGISTRY_USER' , '$CI_REGISTRY_PASSWORD' and '$CI_REGISTRY'"
     - echo "Variables3 are '$DOCKER_IMAGE_NAME' , '$CI_COMMIT_BRANCH' and '$CI_DEFAULT_BRANCH'"
-    - echo "changed 1"
+    - echo "changed 2"
 
 test_agify:
   stage: test
