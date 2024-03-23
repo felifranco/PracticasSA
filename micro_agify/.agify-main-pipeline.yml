@@ -19,7 +19,6 @@ build_main_agify:
   script:
     - cd "$MICRO_PATH"
     - docker build --pull -t "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME" .
-    - docker push "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
   rules:
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
 
@@ -28,6 +27,8 @@ test_main_agify:
   needs: [build_main_agify]
   script:
     - echo "This job tests something."
+    - docker push "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
+    - echo "Docker push"
   rules:
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
 
