@@ -9,7 +9,7 @@ variables:
   MICRO_PATH: "micro_agify"
   DOCKER_IMAGE_NAME: "f64franco/micro-agify"
 
-build_agify:
+build_develop_agify:
   image: docker:cli
   stage: build
   services:
@@ -23,13 +23,19 @@ build_agify:
   rules:
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
 
-test_agify:
+test_develop_agify:
   stage: test
+  needs: [build_develop_agify]
   script:
     - echo "This job tests something."
+  rules:
+    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
 
-deploy_agify:
+deploy_develop_agify:
   stage: deploy
+  needs: [test_develop_agify]
   script:
     - echo "This job deploys something."
+  rules:
+    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
   environment: production
