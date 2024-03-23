@@ -1,24 +1,31 @@
 stages:
   - build
   - test
+  - post-build
   - deploy
-
-default:
-  image: alpine
-
-variables:
-  GLOBAL_VAR: "A global variable"
+  - delivery
 
 build_agify:
+  image: docker:cli
   stage: build
+  services:
+    - docker:dind
   variables:
-    JOB_VAR: "A job variable"
+    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - echo "Variables are '$CI_REGISTRY_IMAGE' and '$CI_COMMIT_REF_SLUG'"
-    - echo "Variables2 are '$CI_REGISTRY_USER' , '$CI_REGISTRY_PASSWORD' and '$CI_REGISTRY'"
-    - echo "Variables3 are '$DOCKER_IMAGE_NAME' , '$CI_COMMIT_BRANCH' and '$CI_DEFAULT_BRANCH'"
-    - echo "changed 4"
-    - echo "Variables are '$GLOBAL_VAR' and '$JOB_VAR'"
+    - docker build --pull -t "$DOCKER_IMAGE_NAME" .
+    - docker push "$DOCKER_IMAGE_NAME"
+    - |
+      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        docker tag "$DOCKER_IMAGE_NAME" "$CI_REGISTRY_IMAGE:latest"
+        docker push "$CI_REGISTRY_IMAGE:latest"
+      fi
+  rules:
+    - if: $CI_COMMIT_BRANCH
+      exists:
+        - Dockerfile
 
 test_agify:
   stage: test
