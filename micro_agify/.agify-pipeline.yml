@@ -5,22 +5,21 @@ stages:
   - deploy
   - delivery
 
+variables:
+  MICRO_PATH: "micro_agify"
+  DOCKER_IMAGE_NAME: "f64franco/micro-agify"
+
 build_agify:
   image: docker:cli
   stage: build
   services:
     - docker:dind
-  variables:
-    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
   script:
-    - ls -al
-    - cd micro_agify
+    - cd "$MICRO_PATH"
     - docker build --pull -t "$DOCKER_IMAGE_NAME" .
     - docker push "$DOCKER_IMAGE_NAME"
-    - echo "$DOCKER_IMAGE_NAME"
-    - echo "LOGIN OK"
 
 test_agify:
   stage: test
