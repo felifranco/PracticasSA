@@ -27,13 +27,13 @@ build_agify:
       exists:
         - Dockerfile
 
-test_agify:
+.test_agify:
   stage: test
   needs: [build_agify]
   script:
     - echo "This job tests something."
 
-deploy_agify:
+.deploy_agify:
   stage: deploy
   needs: [test_agify]
   script:
