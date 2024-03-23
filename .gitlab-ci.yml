@@ -1,8 +1,8 @@
 stages:
-  - triggers
+  - integration
 
 micro_agify_develop:
-  stage: triggers
+  stage: integration
   trigger:
     include: micro_agify/.agify-develop-pipeline.yml
   rules:
@@ -11,7 +11,7 @@ micro_agify_develop:
         - micro_agify/*
 
 micro_agify_main:
-  stage: triggers
+  stage: integration
   trigger:
     include: micro_agify/.agify-main-pipeline.yml
   rules:
@@ -20,7 +20,7 @@ micro_agify_main:
         - micro_agify/*
 
 micro_genderize:
-  stage: triggers
+  stage: integration
   trigger:
     include: micro_genderize/.genderize-pipeline.yml
   rules:
@@ -28,7 +28,7 @@ micro_genderize:
         - micro_genderize/*
 
 micro_middleware:
-  stage: triggers
+  stage: integration
   trigger:
     include: middleware/.middleware-pipeline.yml
   rules:
