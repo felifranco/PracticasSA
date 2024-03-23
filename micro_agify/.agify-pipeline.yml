@@ -9,7 +9,7 @@ variables:
   MICRO_PATH: "micro_agify"
   DOCKER_IMAGE_NAME: "f64franco/micro-agify"
 
-build_agify:
+build_develop_agify:
   image: docker:cli
   stage: build
   services:
@@ -17,13 +17,15 @@ build_agify:
   before_script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
   script:
-    - cd "$MICRO_PATH"
-    - docker build --pull -t "$DOCKER_IMAGE_NAME" .
-    - docker push "$DOCKER_IMAGE_NAME"
+    - if [[ "$CI_COMMIT_BRANCH" == "$DEVELOP_BRANCH_NAME"]]; then
+      cd "$MICRO_PATH"
+      docker build --pull -t "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" .
+      docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+      fi
 
 test_agify:
   stage: test
-  needs: [build_agify]
+  needs: [build_develop_agify]
   script:
     - echo "This job tests something."
 
