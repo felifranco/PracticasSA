@@ -1,39 +1,33 @@
 stages:
   - build
   - test
-  - post-build
   - deploy
-  - delivery
+
+default:
+  image: alpine
+
+variables:
+  GLOBAL_VAR: "A global variable"
 
 build_agify:
-  image: docker:cli
   stage: build
-  services:
-    - docker:dind
   variables:
-    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    JOB_VAR: "A job variable"
   script:
-    - docker build --pull -t "$DOCKER_IMAGE_NAME" .
-    - docker push "$DOCKER_IMAGE_NAME"
-    - |
-      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-        docker tag "$DOCKER_IMAGE_NAME" "$CI_REGISTRY_IMAGE:latest"
-        docker push "$CI_REGISTRY_IMAGE:latest"
-      fi
-  rules:
-    - if: $CI_COMMIT_BRANCH
-      exists:
-        - Dockerfile
+    - echo "Variables are '$CI_REGISTRY_IMAGE' and '$CI_COMMIT_REF_SLUG'"
+    - echo "Variables2 are '$CI_REGISTRY_USER' , '$CI_REGISTRY_PASSWORD' and '$CI_REGISTRY'"
+    - echo "Variables3 are '$DOCKER_IMAGE_NAME' , '$CI_COMMIT_BRANCH' and '$CI_DEFAULT_BRANCH'"
+    - echo "changed 5"
+    - echo "Variables6 are '$GLOBAL_VAR' and '$JOB_VAR'"
+    - echo "Variables7 are '$CI_JOB_TOKEN' and ''"
 
-.test_agify:
+test_agify:
   stage: test
   needs: [build_agify]
   script:
     - echo "This job tests something."
 
-.deploy_agify:
+deploy_agify:
   stage: deploy
   needs: [test_agify]
   script:
