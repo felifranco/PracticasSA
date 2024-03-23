@@ -1,7 +1,9 @@
 stages:
   - build
   - test
+  - post-build
   - deploy
+  - delivery
 
 default:
   image: alpine
