@@ -6,9 +6,14 @@ stages:
   - delivery
 
 build_agify:
+  image: docker:cli
   stage: build
+  services:
+    - docker:dind
+  variables:
+    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   script:
-    - echo "EMPTY"
+    - echo "$DOCKER_IMAGE_NAME"
 
 test_agify:
   stage: test
