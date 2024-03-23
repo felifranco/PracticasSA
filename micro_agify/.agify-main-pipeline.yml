@@ -23,8 +23,13 @@ build_main_agify:
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
 
 test_main_agify:
+  image: docker:cli
   stage: test
   needs: [build_main_agify]
+  services:
+    - docker:dind
+  before_script:
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
   script:
     - echo "This job tests something."
     - docker push "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
