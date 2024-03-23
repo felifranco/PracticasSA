@@ -17,10 +17,11 @@ build_develop_agify:
   before_script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
   script:
-    - if [[ "$CI_COMMIT_BRANCH" == "$DEVELOP_BRANCH_NAME"]]; then
-      cd "$MICRO_PATH"
-      docker build --pull -t "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" .
-      docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    - |
+      if [[ "$CI_COMMIT_BRANCH" == "$DEVELOP_BRANCH_NAME"]]; then
+        cd "$MICRO_PATH"
+        docker build --pull -t "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" .
+        docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
       fi
 
 test_agify:
