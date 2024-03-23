@@ -6,13 +6,19 @@ stages:
 default:
   image: alpine
 
+variables:
+  GLOBAL_VAR: "A global variable"
+
 build_agify:
   stage: build
+  variables:
+    JOB_VAR: "A job variable"
   script:
     - echo "Variables are '$CI_REGISTRY_IMAGE' and '$CI_COMMIT_REF_SLUG'"
     - echo "Variables2 are '$CI_REGISTRY_USER' , '$CI_REGISTRY_PASSWORD' and '$CI_REGISTRY'"
     - echo "Variables3 are '$DOCKER_IMAGE_NAME' , '$CI_COMMIT_BRANCH' and '$CI_DEFAULT_BRANCH'"
-    - echo "changed 3"
+    - echo "changed 4"
+    - echo "Variables are '$GLOBAL_VAR' and '$JOB_VAR'"
 
 test_agify:
   stage: test
