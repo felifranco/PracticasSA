@@ -1,0 +1,41 @@
+stages:
+  - build
+  - test
+  - post-build
+  - deploy
+  - delivery
+
+variables:
+  MICRO_PATH: "micro_agify"
+  DOCKER_IMAGE_NAME: "f64franco/micro-agify"
+
+build_main_agify:
+  image: docker:cli
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+  script:
+    - cd "$MICRO_PATH"
+    - docker build --pull -t "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME" .
+    - docker push "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
+
+test_main_agify:
+  stage: test
+  needs: [build_main_agify]
+  script:
+    - echo "This job tests something."
+  rules:
+    - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
+
+deploy_main_agify:
+  stage: deploy
+  needs: [test_main_agify]
+  script:
+    - echo "This job deploys something."
+  rules:
+    - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
+  environment: production
