@@ -1,6 +1,7 @@
 stages:
   - integration
 
+# AGIFY
 micro_agify_develop:
   stage: integration
   trigger:
@@ -19,6 +20,7 @@ micro_agify_main:
       changes:
         - micro_agify/*
 
+# GENDERIZE
 micro_genderize:
   stage: integration
   trigger:
@@ -27,6 +29,7 @@ micro_genderize:
     - changes:
         - micro_genderize/*
 
+# MIDDLEWARE
 micro_middleware:
   stage: integration
   trigger:

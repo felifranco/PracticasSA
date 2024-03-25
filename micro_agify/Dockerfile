@@ -4,7 +4,7 @@ LABEL email="f64franco@gmail.com"
 LABEL description = "Microservicio Agify."
 EXPOSE 3000
 WORKDIR /app
-COPY ./package.json ./
-COPY ./swagger.js ./
-COPY ./server.js ./
+COPY ./Server/src/package.json ./
+COPY ./Server/src/swagger.js ./
+COPY ./Server/src/server.js ./
 CMD ["npm", "run", "start"]
