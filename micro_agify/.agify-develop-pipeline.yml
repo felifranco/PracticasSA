@@ -22,8 +22,6 @@ build_develop_agify:
     - cd "$MICRO_PATH"
     - docker build --pull -t "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" .
     - docker push "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
-  rules:
-    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
 
 test_develop_agify:
   stage: test
@@ -39,8 +37,6 @@ test_develop_agify:
     - cat .env
     - npm install && npm test
     - echo "This job tests something. PULLED"
-  rules:
-    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
 
 deploy_develop_agify:
   stage: deploy
@@ -52,6 +48,4 @@ deploy_develop_agify:
     - docker tag "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
-  rules:
-    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
   environment: production
