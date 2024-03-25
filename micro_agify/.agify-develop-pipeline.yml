@@ -8,6 +8,7 @@ stages:
 variables:
   MICRO_PATH: "micro_agify"
   DOCKER_IMAGE_NAME: "f64franco/micro-agify"
+  LOCAL_DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE
 
 build_develop_agify:
   image: docker:cli
@@ -15,27 +16,35 @@ build_develop_agify:
   services:
     - docker:dind
   before_script:
-    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - cd "$MICRO_PATH"
-    - docker build --pull -t "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" .
-    - docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    - docker build --pull -t "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" .
+    - docker push "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
   rules:
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
 
 test_develop_agify:
   stage: test
   needs: [build_develop_agify]
+  services:
+    - docker:dind
   script:
-    - echo "This job tests something."
+    - docker pull "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    - echo "This job tests something. PULLED"
   rules:
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
 
 deploy_develop_agify:
   stage: deploy
   needs: [test_develop_agify]
+  services:
+    - docker:dind
+  before_script:
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
   script:
-    - echo "This job deploys something."
+    - docker tag "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    - docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
   rules:
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
   environment: production
