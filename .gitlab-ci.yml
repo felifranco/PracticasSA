@@ -7,7 +7,7 @@ micro_agify_develop:
     include: micro_agify/.agify-develop-pipeline.yml
   rules:
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
-    - changes:
+      changes:
         - micro_agify/*
 
 micro_agify_main:
@@ -16,7 +16,7 @@ micro_agify_main:
     include: micro_agify/.agify-main-pipeline.yml
   rules:
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
-    - changes:
+      changes:
         - micro_agify/*
 
 micro_genderize:
