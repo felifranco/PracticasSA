@@ -5,7 +5,7 @@ stages:
 micro_agify_develop:
   stage: integration
   trigger:
-    include: micro_agify/.agify-develop-pipeline.yml
+    include: micro_agify/CI_CD/.agify-develop-pipeline.yml
   rules:
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
       changes:
@@ -14,7 +14,7 @@ micro_agify_develop:
 micro_agify_main:
   stage: integration
   trigger:
-    include: micro_agify/.agify-main-pipeline.yml
+    include: micro_agify/CI_CD/.agify-main-pipeline.yml
   rules:
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
       changes:
