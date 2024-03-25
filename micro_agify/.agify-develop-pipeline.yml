@@ -36,6 +36,7 @@ test_develop_agify:
     - docker run -d --name m_agify -p 3000:3000 --env HOST=0.0.0.0 --env PORT=3000 "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     - docker inspect m_agify --format "SERVER=http://{{.NetworkSettings.IPAddress}}:3000" >> .env
     - ls -al
+    - cat .env
     - npm install && npm test
     - echo "This job tests something. PULLED"
   rules:
