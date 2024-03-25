@@ -31,6 +31,7 @@ test_develop_agify:
     - docker:dind
   script:
     - docker pull "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    - echo "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     - echo "This job tests something. PULLED"
   rules:
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
