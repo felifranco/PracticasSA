@@ -43,8 +43,7 @@ deploy_develop_agify:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     #- echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
   script:
-    - docker pull "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
-    - docker tag "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    - docker tag --pull "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     - docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
   rules:
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
