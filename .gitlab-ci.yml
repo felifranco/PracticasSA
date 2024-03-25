@@ -6,18 +6,20 @@ micro_agify_develop:
   trigger:
     include: micro_agify/.agify-develop-pipeline.yml
   rules:
-    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
     - changes:
         - micro_agify/*
+  only:
+    - $DEVELOP_BRANCH_NAME
 
 micro_agify_main:
   stage: integration
   trigger:
     include: micro_agify/.agify-main-pipeline.yml
   rules:
-    - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
     - changes:
         - micro_agify/*
+  only:
+    - $MAIN_BRANCH_NAME
 
 micro_genderize:
   stage: integration
