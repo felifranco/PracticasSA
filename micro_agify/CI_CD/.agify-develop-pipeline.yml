@@ -36,7 +36,7 @@ test_develop_agify:
     - ls -al
     - cat .env
     - npm install && npm test
-    - echo "This job tests something. PULLED"
+    - echo "Successful test :)"
 
 deploy_develop_agify:
   stage: deploy
