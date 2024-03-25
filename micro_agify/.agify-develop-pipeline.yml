@@ -10,8 +10,9 @@ variables:
   DOCKER_IMAGE_NAME: "f64franco/micro-agify"
   LOCAL_DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE
 
-build_develop_agify:
-  image: docker:cli
+image: docker:cli
+
+build_develop_agify:  
   stage: build
   services:
     - docker:dind
