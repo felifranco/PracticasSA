@@ -31,7 +31,6 @@ test_develop_agify:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - echo "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     - docker pull "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     - echo "This job tests something. PULLED"
   rules:
@@ -41,7 +40,8 @@ deploy_develop_agify:
   stage: deploy
   needs: [test_develop_agify]
   before_script:
-    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    #- echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
   script:
     - docker tag "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     - docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
