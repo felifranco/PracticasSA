@@ -30,12 +30,13 @@ test_develop_agify:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - cd "$MICRO_PATH"
-    - docker pull "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
-    - docker run -d --name m_agify -p 3000:3000 --env HOST=0.0.0.0 --env PORT=3000 "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
-    - docker inspect m_agify --format "SERVER=http://{{.NetworkSettings.IPAddress}}:3000" >> .env
-    - ls -al
-    - cat .env
-    - npm install && npm test
+    #- docker pull "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    #- docker run -d --name m_agify -p 3000:3000 --env HOST=0.0.0.0 --env PORT=3000 "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    #- docker inspect m_agify --format "SERVER=http://{{.NetworkSettings.IPAddress}}:3000" >> .env
+    #- ls -al
+    #- cat .env
+    #- npm install && npm test
+    - docker compose up
     - echo "Successful test :)"
 
 deploy_develop_agify:

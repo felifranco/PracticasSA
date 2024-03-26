@@ -85,3 +85,23 @@ In short, the gitlab-runner part of the command is replaced with docker run [doc
 ```shell
 docker pull docker:cli
 ```
+
+## Docker Compose
+
+```shell
+sudo dnf install docker-compose
+```
+
+```shell
+docker build --tag micro_agify -f server.Dockerfile .
+
+docker run -d --name m_agify -p 3000:3000 --env HOST=0.0.0.0 --env PORT=3000 micro_agify:latest
+```
+
+```shell
+docker build --tag testing_agify -f testing.Dockerfile .
+
+docker run --name t_agify testing_agify
+
+docker run --name t_agify --env SERVER="http://172.17.0.1:3011" testing_agify
+```
