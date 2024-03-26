@@ -4,7 +4,7 @@ require("dotenv").config();
 const HOST = `${process.env.SERVER}`; //// Name defined in compose.yaml
 
 describe("GET /", () => {
-  console.log(`Testing Server -> ${HOST}`);
+  console.log(`Testing Server 2 -> ${HOST}`);
   test("Should respond with a 200 status code", async () => {
     const response = await request(`${HOST}/?name=peter`).get("/").send();
     expect(response.statusCode).toBe(200);
