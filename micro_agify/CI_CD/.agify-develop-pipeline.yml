@@ -36,7 +36,7 @@ test_develop_agify:
     #- ls -al
     #- cat .env
     #- npm install && npm test
-    - docker compose up
+    - docker compose up --abort-on-container-exit
     - echo "Successful test :)"
 
 deploy_develop_agify:
