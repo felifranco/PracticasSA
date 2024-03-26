@@ -31,7 +31,7 @@ test_develop_agify:
   script:
     - cd "$MICRO_PATH"
     #- docker compose up --abort-on-container-exit
-    - docker compose up --exit-code-from testing
+    - docker compose -f develop-compose.yaml up --exit-code-from testing
 
 deploy_develop_agify:
   stage: deploy

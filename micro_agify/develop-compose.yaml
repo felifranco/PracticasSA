@@ -1,9 +1,9 @@
 services:
   server:
-    #build:
-    #  context: ./
-    #  dockerfile: server.Dockerfile
-    image: "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    build:
+      context: ./
+      dockerfile: server.Dockerfile
+    #image: "$LOCAL_DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     container_name: agify_server
     environment:
       - HOST=0.0.0.0
