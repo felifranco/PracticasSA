@@ -13,7 +13,7 @@ describe("GET /", () => {
   test("Should have a respond a 'Content-Type': 'application/json' in header", async () => {
     const response = await request(`${HOST}/?name=peter`).get("/").send();
     expect(response.headers["content-type"]).toEqual(
-      expect.stringContaining("json")
+      expect.stringContaining("jsonsss")
     );
   });
 });
