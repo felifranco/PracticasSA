@@ -7,4 +7,5 @@ WORKDIR /app
 COPY Server/package.json ./
 COPY Server/swagger.js ./
 COPY Server/server.js ./
+RUN apk add curl
 CMD ["npm", "run", "start"]
