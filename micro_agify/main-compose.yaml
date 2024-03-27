@@ -15,10 +15,10 @@ services:
     healthcheck:
       #test: wget --no-verbose --tries=1 --spider http://localhost:3000/api || exit 1
       test: curl -f http://localhost:3000/api
-      interval: 10s
-      retries: 2
+      interval: 20s
+      retries: 5
       start_period: 20s
-      timeout: 10s
+      timeout: 15s
   testing:
     build:
       context: ./
