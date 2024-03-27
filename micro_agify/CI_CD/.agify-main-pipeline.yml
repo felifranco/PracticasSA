@@ -9,33 +9,37 @@ variables:
   MICRO_PATH: "micro_agify"
   DOCKER_IMAGE_NAME: "f64franco/micro-agify"
 
+image: docker:cli
+services:
+  - docker:dind
+
 build_main_agify:
-  image: docker:cli
   stage: build
-  services:
-    - docker:dind
   before_script:
-    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - cd "$MICRO_PATH"
-    - docker build --pull -t "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME" .
-    - docker push "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
-  rules:
-    - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$MAIN_BRANCH_NAME" .
+    - docker push "$CI_REGISTRY_IMAGE:$MAIN_BRANCH_NAME"
 
 test_main_agify:
   stage: test
   needs: [build_main_agify]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - echo "This job tests something."
-  rules:
-    - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
+    - cd "$MICRO_PATH"
+    #- docker compose up --abort-on-container-exit
+    - docker compose -f main-compose.yaml up --exit-code-from testing
 
 deploy_main_agify:
   stage: deploy
   needs: [test_main_agify]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - echo "This job deploys something."
-  rules:
-    - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
+    - docker pull "$CI_REGISTRY_IMAGE:$MAIN_BRANCH_NAME"
+    - docker tag "$CI_REGISTRY_IMAGE:$MAIN_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - docker push "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
   environment: production

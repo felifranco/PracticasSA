@@ -3,7 +3,7 @@ services:
     #build:
     #  context: ./
     #  dockerfile: server.Dockerfile
-    image: "$CI_REGISTRY_IMAGE:$DEVELOP_BRANCH_NAME"
+    image: "$CI_REGISTRY_IMAGE:$MAIN_BRANCH_NAME"
     container_name: agify_server
     environment:
       - HOST=0.0.0.0
