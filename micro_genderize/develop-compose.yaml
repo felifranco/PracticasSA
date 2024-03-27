@@ -3,8 +3,8 @@ services:
     #build:
     #  context: ./
     #  dockerfile: server.Dockerfile
-    image: "$CI_REGISTRY_IMAGE/$MICRO_PATH:$MAIN_BRANCH_NAME"
-    container_name: agify_server
+    image: "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME"
+    container_name: genderize_server
     environment:
       - HOST=0.0.0.0
       - PORT=3000
@@ -24,8 +24,8 @@ services:
       context: ./
       dockerfile: testing.Dockerfile
       args:
-        - SERVER=http://agify_server:3000 #Name of the above container, sevice "server".
-    container_name: agify_testing
+        - SERVER=http://genderize_server:3000 #Name of the above container, sevice "server".
+    container_name: genderize_testing
     depends_on:
       #- server
       server:

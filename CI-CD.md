@@ -105,3 +105,5 @@ docker run --name t_agify testing_agify
 
 docker run --name t_agify --env SERVER="http://172.17.0.1:3011" testing_agify
 ```
+
+npm install -D jest supertest

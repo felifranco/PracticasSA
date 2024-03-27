@@ -6,14 +6,14 @@ stages:
   - delivery
 
 variables:
-  MICRO_PATH: "micro_agify"
-  DOCKER_IMAGE_NAME: "f64franco/micro-agify"
+  MICRO_PATH: "micro_genderize"
+  DOCKER_IMAGE_NAME: "f64franco/micro-genderize"
 
 image: docker:cli
 services:
   - docker:dind
 
-build_develop_agify:
+build_develop_genderize:
   stage: build
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
@@ -22,9 +22,9 @@ build_develop_agify:
     - docker build --pull -t "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME" --file server.Dockerfile .
     - docker push "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME"
 
-test_develop_agify:
+test_develop_genderize:
   stage: test
-  needs: [build_develop_agify]
+  needs: [build_develop_genderize]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -32,9 +32,9 @@ test_develop_agify:
     #- docker compose up --abort-on-container-exit
     - docker compose -f develop-compose.yaml up --exit-code-from testing
 
-deploy_develop_agify:
+deploy_develop_genderize:
   stage: deploy
-  needs: [test_develop_agify]
+  needs: [test_develop_genderize]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:

@@ -21,12 +21,22 @@ micro_agify_main:
         - micro_agify/*
 
 # GENDERIZE
-micro_genderize:
+micro_genderize_develop:
   stage: integration
   trigger:
-    include: micro_genderize/.genderize-pipeline.yml
+    include: micro_genderize/CI_CD/.genderize-develop-pipeline.yml
   rules:
-    - changes:
+    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
+      changes:
+        - micro_genderize/*
+
+micro_genderize_main:
+  stage: integration
+  trigger:
+    include: micro_genderize/CI_CD/.genderize-main-pipeline.yml
+  rules:
+    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
+      changes:
         - micro_genderize/*
 
 # MIDDLEWARE

@@ -23,7 +23,8 @@ app.get("/", (req, res) => {
   fetch("https://api.genderize.io/?name=" + req.query.name)
     .then((response) => response.json())
     .then((data) => {
-      res.send(data);
+      res.setHeader("Content-Type", "application/json");
+      res.json(data);
     });
 });
 
