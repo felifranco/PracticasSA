@@ -7,7 +7,7 @@ const port = process.env.PORT;
 const doc = {
   info: {
     title: "Middleware",
-    description: `'Se consumen el microservicio 1 y microservicio 2'`,
+    description: `'Se consumen el microservicio agify y microservicio genderize'`,
   },
   host: `${host}:${port}`,
 };

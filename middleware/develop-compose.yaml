@@ -1,0 +1,70 @@
+services:
+  agify:
+    #build:
+    #  context: ../micro_agify
+    #  dockerfile: server.Dockerfile
+    image: "$CI_REGISTRY_IMAGE/micro_agify:$DEVELOP_BRANCH_NAME"
+    container_name: agify_server
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+    healthcheck:
+      #test: wget --no-verbose --tries=1 --spider http://localhost:3000/api || exit 1
+      test: curl -f http://localhost:3000/api
+      interval: 20s
+      retries: 5
+      start_period: 20s
+      timeout: 15s
+  genderize:
+    #build:
+    #  context: ../micro_genderize
+    #  dockerfile: server.Dockerfile
+    image: "$CI_REGISTRY_IMAGE/micro_genderize:$DEVELOP_BRANCH_NAME"
+    container_name: genderize_server
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+    healthcheck:
+      #test: wget --no-verbose --tries=1 --spider http://localhost:3000/api || exit 1
+      test: curl -f http://localhost:3000/api
+      interval: 20s
+      retries: 5
+      start_period: 20s
+      timeout: 15s
+  server:
+    #build:
+    #  context: ./
+    #  dockerfile: server.Dockerfile
+    #  args:
+    #    - MICRO_AGIFY=http://agify_server:3000
+    #    - MICRO_GENDERIZE=http://genderize_server:3000
+    image: "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME"
+    container_name: middleware_server
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+      - MICRO_AGIFY=http://agify_server:3000
+      - MICRO_GENDERIZE=http://genderize_server:3000
+    healthcheck:
+      #test: wget --no-verbose --tries=1 --spider http://localhost:3000/api || exit 1
+      test: curl -f http://localhost:3000/api
+      interval: 20s
+      retries: 5
+      start_period: 20s
+      timeout: 15s
+    depends_on:
+      agify:
+        condition: service_healthy
+      genderize:
+        condition: service_healthy
+  testing:
+    build:
+      context: ./
+      dockerfile: testing.Dockerfile
+      args:
+        - SERVER=http://middleware_server:3000 #Name of the above container, sevice "server".
+    container_name: middleware_testing
+    depends_on:
+      #- server
+      server:
+        condition: service_healthy

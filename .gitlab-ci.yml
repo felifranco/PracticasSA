@@ -35,15 +35,25 @@ micro_genderize_main:
   trigger:
     include: micro_genderize/CI_CD/.genderize-main-pipeline.yml
   rules:
-    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
+    - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
       changes:
         - micro_genderize/*
 
 # MIDDLEWARE
-micro_middleware:
+micro_middleware_develop:
   stage: integration
   trigger:
-    include: middleware/.middleware-pipeline.yml
+    include: middleware/CI_CD/.middleware-develop-pipeline.yml
   rules:
-    - changes:
+    - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
+      changes:
+        - middleware/*
+
+micro_middleware_main:
+  stage: integration
+  trigger:
+    include: middleware/CI_CD/.middleware-main-pipeline.yml
+  rules:
+    - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
+      changes:
         - middleware/*

@@ -6,8 +6,8 @@ const swaggerDocument = require("./swagger.json");
 
 const host = process.env.HOST;
 const port = process.env.PORT;
-const micro1Url = process.env.MICRO1_URL;
-const micro2Url = process.env.MICRO2_URL;
+const microAgify = process.env.MICRO_AGIFY;
+const microGenderize = process.env.MICRO_GENDERIZE;
 
 const docs = "/api";
 app.use(docs, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -22,23 +22,23 @@ app.get("/", async (req, res) => {
         `Le hace falta un parámetro, revise la documentación en http://${host}:${port}${docs}/`
       );
   }
-  console.log(name);
 
   let micro1, micro2;
 
-  await fetch(`${micro1Url}/?name=${req.query.name}`)
+  await fetch(`${microAgify}/?name=${req.query.name}`)
     .then((response) => response.json())
     .then((data) => {
       micro1 = data;
     });
 
-  await fetch(`${micro2Url}/?name=${req.query.name}`)
+  await fetch(`${microGenderize}/?name=${req.query.name}`)
     .then((response) => response.json())
     .then((data) => {
       micro2 = data;
     });
 
-  res.send({
+  res.setHeader("Content-Type", "application/json");
+  res.json({
     agify: micro1,
     genderize: micro2,
   });
@@ -46,6 +46,6 @@ app.get("/", async (req, res) => {
 
 app.listen(port, host, () => {
   console.log(
-    `\nServer running at http://${host}:${port}/.\nSee the documentation at http://${host}:${port}${docs}`
+    `\nMiddleware Server running at http://${host}:${port}/.\nSee the documentation at http://${host}:${port}${docs}`
   );
 });
