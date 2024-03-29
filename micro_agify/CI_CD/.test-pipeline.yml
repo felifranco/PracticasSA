@@ -1,7 +1,47 @@
 stages:
+  - build
   - test
+  - post-build
+  - deploy
+  - delivery
 
-testing:
-  stage: test
+variables:
+  MICRO_PATH: "micro_agify"
+  DOCKER_IMAGE_NAME: "f64franco/micro-agify"
+
+image: docker:cli
+services:
+  - docker:dind
+
+build_develop_agify:
+  stage: build
+  before_script:
+    #- docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - echo "VARS"
+    - cd "$MICRO_PATH"
+    - echo $CI_REGISTRY_IMAGE
+    - echo $DEVELOP_BRANCH_NAME
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME" --file server.Dockerfile .
+    #- docker push "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME"
+
+.test_develop_agify:
+  stage: test
+  needs: [build_develop_agify]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd "$MICRO_PATH"
+    #- docker compose up --abort-on-container-exit
+    - docker compose -f develop-compose.yaml up --exit-code-from testing
+
+.deploy_develop_agify:
+  stage: deploy
+  needs: [test_develop_agify]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME"
+    - docker tag "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+  environment: production
