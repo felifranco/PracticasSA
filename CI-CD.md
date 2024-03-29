@@ -139,6 +139,12 @@ gitlab-runner register
 
 y completar los datos solicitados.
 
+```shell
+apt update
+apt install nano
+```
+
+
 Con esto se finaliza la configuración del `Runner local`, ahora solo queda visualizar los _logs_ de las tareas que se ejecutan en él:
 
 ```shell

@@ -9,27 +9,20 @@ variables:
   MICRO_PATH: "micro_agify"
   DOCKER_IMAGE_NAME: "f64franco/micro-agify"
 
-image: docker:25.0.5-cli
-#services:
-#  - docker:25.0.5-dind
+image: docker:cli
+services:
+  - docker:dind
 
 build_develop_agify:
   stage: build
   before_script:
-    #- docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - df
-    - cat /etc/resolv.conf
-    - cat /etc/hosts
-
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - cd "$MICRO_PATH"
-    - echo $CI_REGISTRY_IMAGE
-    - echo $DEVELOP_BRANCH_NAME
-    - docker build --tag imagen_prueba_pipeline --file server.Dockerfile .
-    #- docker build -t "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME" --file server.Dockerfile .
-    #- docker push "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME"
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME" --file server.Dockerfile .
+    - docker push "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME"
 
-.test_develop_agify:
+test_develop_agify:
   stage: test
   needs: [build_develop_agify]
   before_script:
@@ -39,7 +32,7 @@ build_develop_agify:
     #- docker compose up --abort-on-container-exit
     - docker compose -f develop-compose.yaml up --exit-code-from testing
 
-.deploy_develop_agify:
+deploy_develop_agify:
   stage: deploy
   needs: [test_develop_agify]
   before_script:
