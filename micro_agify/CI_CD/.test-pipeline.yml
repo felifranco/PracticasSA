@@ -17,6 +17,10 @@ build_develop_agify:
   stage: build
   before_script:
     #- docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - df
+    - cat /etc/resolv.conf
+    - cat /etc/hosts
+
   script:
     - cd "$MICRO_PATH"
     - echo $CI_REGISTRY_IMAGE
