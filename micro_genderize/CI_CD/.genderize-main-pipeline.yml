@@ -31,6 +31,7 @@ test_main_genderize:
     - cd "$MICRO_PATH"
     #- docker compose up --abort-on-container-exit
     - docker compose -f main-compose.yaml up --exit-code-from testing
+    - docker compose -f main-compose.yaml down --rmi all -v --remove-orphans
 
 deploy_main_genderize:
   stage: deploy
@@ -42,4 +43,5 @@ deploy_main_genderize:
     - docker tag "$CI_REGISTRY_IMAGE/$MICRO_PATH:$MAIN_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker push "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
+    - docker rmi "$CI_REGISTRY_IMAGE/$MICRO_PATH:$MAIN_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
   environment: production
