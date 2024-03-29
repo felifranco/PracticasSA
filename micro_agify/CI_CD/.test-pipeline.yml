@@ -10,8 +10,8 @@ variables:
   DOCKER_IMAGE_NAME: "f64franco/micro-agify"
 
 image: docker:25.0.5-cli
-services:
-  - docker:25.0.5-dind
+#services:
+#  - docker:25.0.5-dind
 
 build_develop_agify:
   stage: build
