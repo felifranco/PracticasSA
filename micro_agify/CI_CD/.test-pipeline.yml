@@ -9,7 +9,7 @@ variables:
   MICRO_PATH: "micro_agify"
   DOCKER_IMAGE_NAME: "f64franco/micro-agify"
 
-image: docker:cli
+image: docker:25.0.5-cli
 services:
   - docker:25.0.5-dind
 
