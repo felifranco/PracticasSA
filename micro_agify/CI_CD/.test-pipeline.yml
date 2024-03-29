@@ -1,0 +1,7 @@
+stages:
+  - test
+
+testing:
+  stage: test
+  script:
+    - echo "VARS"

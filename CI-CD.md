@@ -125,13 +125,27 @@ docker run --rm -v create gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-
   --description "docker-runner"
 ```
 
+Si correr el comando anterior no funciona para registrar el Runner también se puede probar ingresar al [contenedor creado](#crear-un-contenedor-con-gitlab-runner) con el comando:
+
+```shell
+docker exec -it gitlab-runner bash
+```
+
+dentro del contenedor `gitlab-runner` ejecutar:
+
+```shell
+gitlab-runner register
+```
+
+y completar los datos solicitados.
+
 Con esto se finaliza la configuración del `Runner local`, ahora solo queda visualizar los _logs_ de las tareas que se ejecutan en él:
 
 ```shell
 docker logs gitlab-runner --follow
 ```
 
-IMPORTANTE: Para canalizar el trabajo de los pipelines a éste Runner es importante desabilitar los Runners compartidos.
+**IMPORTANTE**: Para canalizar el trabajo de los pipelines a éste Runner es importante desabilitar los Runners compartidos.
 
 ## Docker
 
@@ -160,3 +174,7 @@ docker run --name t_agify --env SERVER="http://172.17.0.1:3011" testing_agify
 ```
 
 npm install -D jest supertest
+
+# Referencias
+
+[GitLab CI/CD - Providing your own docker runners](https://www.youtube.com/watch?v=Y0qT6MCnRG0)
