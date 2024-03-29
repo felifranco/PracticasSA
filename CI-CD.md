@@ -54,19 +54,17 @@ docker-build:
         - Dockerfile
 ```
 
-### GitLab Runner in a container
+## GitLab Runner
 
-[Run GitLab Runner in a container](https://docs.gitlab.com/runner/install/docker.html)
+### [Install GitLab Runner](https://docs.gitlab.com/runner/install/)
 
-#### Imagen Docker
+### [Run GitLab Runner in a container](https://docs.gitlab.com/runner/install/docker.html)
 
-https://hub.docker.com/r/gitlab/gitlab-runner/tags
+Descargar la imagen desde [Docker Hub](https://hub.docker.com/r/gitlab/gitlab-runner/tags) con el siguiente comando:
 
 ```shell
 docker pull gitlab/gitlab-runner:latest
 ```
-
-#### Probar el GitLab Runner
 
 La contenedor solo ejecuta el `runner commnad and options` y luego se elimina, la estructura para ejecutar es `docker run <chosen docker options...> gitlab/gitlab-runner <runner command and options...>`
 
@@ -79,6 +77,73 @@ La documentación oficial indica:
 ```
 In short, the gitlab-runner part of the command is replaced with docker run [docker options] gitlab/gitlab-runner, while the rest of the command stays as it is described in the register documentation. The only difference is that the gitlab-runner command is executed inside of a Docker container.
 ```
+
+Eso quiere decir que podemos utilizar gitlab-runner como si estuviera instalada en el equipo local, puede ejecutar todos los comandos descritos en la documentación oficial
+
+#### [Registering runners](https://docs.gitlab.com/runner/register/index.html?tab=Docker)
+
+De acuerdo a la documentación oficial se debe [crear un `project runner` nuevo](https://docs.gitlab.com/ee/ci/runners/runners_scope.html#create-a-project-runner-with-a-runner-authentication-token).
+Ingresar al proyecto de GitLab que se utilizará, en la barra lateral izquierda, ingresar a Settings > CI/CD > Runners (expand) > Project Runners > New project runner.
+
+1. Ingresar al proyecto de GitLab que se utilizará, en la barra lateral izquierda.
+2. Seleccionar **Settings > CI/CD.**
+3. Expandir la sección **Runners**.
+4. Seleccionar **New project runner**.
+5. Seleccionar el **Sistema Operativo** donde GitLab Runner está instalado. En nuestro caso será **Linux** puesto que utilizamos una imagen de Docker con ese OS.
+6. En la sección de Tags, en el campo de Tags, ingresar las etiquetas de trabajo para especificarle al runner cuáles puede ejecutar. Si no hay etiquetas de trabajo para el runner entonces seleccionar **Run untagged jobs**.
+7. Opcional. En el campo de **descripción** del Runner, agregar una descripción para el Runner que se mostrará en GitLab.
+8. Opcional. En la sección de **Configuration**, agregarconfiguraciones adicionales.
+9. Seleccionar **Create runner**.
+
+[](https://docs.gitlab.com/runner/install/docker.html#option-2-use-docker-volumes-to-start-the-runner-container)
+
+Crear volumen
+
+```shell
+docker volume create gitlab-runner-config
+```
+
+Crear el contenedor
+
+```shell
+docker run -d --name gitlab-runner --restart always \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v gitlab-runner-config:/etc/gitlab-runner \
+    gitlab/gitlab-runner:latest
+
+```
+
+[](https://docs.gitlab.com/runner/register/index.html?tab=Docker#register-with-a-runner-authentication-token)
+
+Al finalizar la creación de un nuevo Runner se obtendrá un token con el formato `glrt-xxxxx`. Ingresar ese valor en la variable `$RUNNER_TOKEN` y luego ejecutar el siguiente comando:
+
+`--docker-image docker:dind`
+
+```shell
+docker run --rm -v create gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner register \
+  --non-interactive \
+  --url "https://gitlab.com/" \
+  --token "$RUNNER_TOKEN" \
+  --executor "docker" \
+  --docker-image docker:dind \
+  --description "docker-runner"
+```
+
+```shell
+docker logs gitlab-runner --follow
+```
+
+En la raíz del proyecto se encuentra el archivo `.gitlab-ci.yml`
+
+```
+.
+├── .gitlab-ci.yml
+├── ...
+```
+
+### [Run GitLab Runner in a container](https://docs.gitlab.com/runner/install/docker.html)
+
+#### Probar el GitLab Runner
 
 ## Docker
 
