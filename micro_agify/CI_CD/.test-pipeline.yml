@@ -11,7 +11,7 @@ variables:
 
 image: docker:cli
 services:
-  - docker:dind
+  - docker:25.0.5-dind
 
 build_develop_agify:
   stage: build
