@@ -31,6 +31,7 @@ test_develop_agify:
     - cd "$MICRO_PATH"
     #- docker compose up --abort-on-container-exit
     - docker compose -f develop-compose.yaml up --exit-code-from testing
+    - docker compose -f develop-compose.yaml down
 
 deploy_develop_agify:
   stage: deploy
@@ -42,4 +43,5 @@ deploy_develop_agify:
     - docker tag "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
+    - docker rmi "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
   environment: production
