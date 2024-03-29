@@ -137,13 +137,92 @@ dentro del contenedor `gitlab-runner` ejecutar:
 gitlab-runner register
 ```
 
-y completar los datos solicitados.
+y completar los datos solicitados. Además del ingreso de los datos tuve que hacer una modificación al archivo de configuración `config.toml` porque _GitLab Runner_ no tenía vinculado el volúmen de mi docker local y no tenía permisos de crear contenedores así que primero instalé un editor de texto con los siguientes comandos:
 
 ```shell
 apt update
 apt install nano
 ```
 
+Antes de la modificación el archivo se encuentra así:
+
+```toml
+$ cat /etc/gitlab-runner/config.toml
+concurrent = 1
+check_interval = 0
+connection_max_age = "15m0s"
+shutdown_timeout = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "runner-docker-25-0-5"
+  url = "https://gitlab.com/"
+  id = 34232754
+  token = "glrt-9Ar..."
+  token_obtained_at = 2024-03-29T18:22:03Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = "docker"
+  [runners.cache]
+    MaxUploadedArchiveSize = 0
+  [runners.docker]
+    tls_verify = false
+    image = "docker:25.0.5"
+    privileged = false
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = ["/cache"]
+    shm_size = 0
+    network_mtu = 0
+```
+
+Abrir el archivo para modificarlo
+
+```shell
+nano /etc/gitlab-runner/config.toml
+```
+
+Luego edité los valores de `privileged = true` y `volumes = ["/cache", "/var/run/docker.sock:/var/run/docker.sock"]`. Notar que en el valor `image = "docker:25.0.5"` tiene la versión de docker de mi equipo local, se puede probar utilizar el tag `docker:latest` pero en esta ocación no se hizo. El archivo final de la siguiente forma:
+
+```toml
+$ cat /etc/gitlab-runner/config.toml
+concurrent = 1
+check_interval = 0
+connection_max_age = "15m0s"
+shutdown_timeout = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "runner-docker-25-0-5"
+  url = "https://gitlab.com/"
+  id = 34232754
+  token = "glrt-9Ar..."
+  token_obtained_at = 2024-03-29T18:22:03Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = "docker"
+  [runners.cache]
+    MaxUploadedArchiveSize = 0
+  [runners.docker]
+    tls_verify = false
+    image = "docker:25.0.5"
+    privileged = true
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = ["/cache", "/var/run/docker.sock:/var/run/docker.sock"]
+    shm_size = 0
+    network_mtu = 0
+```
+
+Reiniciar el contenedor:
+
+```shell
+docker restart gitlab-runner
+```
 
 Con esto se finaliza la configuración del `Runner local`, ahora solo queda visualizar los _logs_ de las tareas que se ejecutan en él:
 
