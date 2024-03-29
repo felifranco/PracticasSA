@@ -184,7 +184,7 @@ Abrir el archivo para modificarlo
 nano /etc/gitlab-runner/config.toml
 ```
 
-Luego edité los valores de `privileged = true` y `volumes = ["/cache", "/var/run/docker.sock:/var/run/docker.sock"]`. Notar que en el valor `image = "docker:25.0.5"` tiene la versión de docker de mi equipo local, se puede probar utilizar el tag `docker:latest` pero en esta ocación no se hizo. El archivo final de la siguiente forma:
+Edité los valores de `privileged = true` y `volumes = ["/cache", "/var/run/docker.sock:/var/run/docker.sock"]`. Notar que en el valor `image = "docker:25.0.5"` tiene la versión de docker de mi equipo local, se puede probar utilizar el tag `docker:latest` pero en esta ocación no se hizo. El archivo final de la siguiente forma:
 
 ```toml
 $ cat /etc/gitlab-runner/config.toml
@@ -231,12 +231,6 @@ docker logs gitlab-runner --follow
 ```
 
 **IMPORTANTE**: Para canalizar el trabajo de los pipelines a éste Runner es importante desabilitar los Runners compartidos.
-
-## Docker
-
-```shell
-docker pull docker:cli
-```
 
 ## Docker Compose
 
