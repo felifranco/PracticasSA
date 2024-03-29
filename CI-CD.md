@@ -56,17 +56,15 @@ docker-build:
 
 ## GitLab Runner
 
-### [Install GitLab Runner](https://docs.gitlab.com/runner/install/)
+Se utilizará un contenedor de GitLab Runner para ejecutar los pipelines. Se utilizará la documentación de oficial para [Instalar GitLab Runner](https://docs.gitlab.com/runner/install/) pero particularmente [Correr GitLab Runner en un contenedor](https://docs.gitlab.com/runner/install/docker.html).
 
-### [Run GitLab Runner in a container](https://docs.gitlab.com/runner/install/docker.html)
-
-Descargar la imagen desde [Docker Hub](https://hub.docker.com/r/gitlab/gitlab-runner/tags) con el siguiente comando:
+Primero se debe descargar la imagen desde [Docker Hub](https://hub.docker.com/r/gitlab/gitlab-runner/tags) con el siguiente comando:
 
 ```shell
 docker pull gitlab/gitlab-runner:latest
 ```
 
-La contenedor solo ejecuta el `runner commnad and options` y luego se elimina, la estructura para ejecutar es `docker run <chosen docker options...> gitlab/gitlab-runner <runner command and options...>`
+Se puede probar GitLab Runner en un contenedor desechable ejecutando el `runner commnad and options`, la estructura para ejecutar es `docker run <chosen docker options...> gitlab/gitlab-runner <runner command and options...>`. Por ejemplo:
 
 ```shell
 docker run --rm -t -i gitlab/gitlab-runner --help
@@ -80,12 +78,11 @@ In short, the gitlab-runner part of the command is replaced with docker run [doc
 
 Eso quiere decir que podemos utilizar gitlab-runner como si estuviera instalada en el equipo local, puede ejecutar todos los comandos descritos en la documentación oficial
 
-#### [Registering runners](https://docs.gitlab.com/runner/register/index.html?tab=Docker)
+### Crear un nuevo `Runner`
 
-De acuerdo a la documentación oficial se debe [crear un `project runner` nuevo](https://docs.gitlab.com/ee/ci/runners/runners_scope.html#create-a-project-runner-with-a-runner-authentication-token).
-Ingresar al proyecto de GitLab que se utilizará, en la barra lateral izquierda, ingresar a Settings > CI/CD > Runners (expand) > Project Runners > New project runner.
+De acuerdo a la documentación oficial se debe [crear un nuevo `Project Runner`](https://docs.gitlab.com/ee/ci/runners/runners_scope.html#create-a-project-runner-with-a-runner-authentication-token). Para hacerlo se deben seguir los siguientes pasos:
 
-1. Ingresar al proyecto de GitLab que se utilizará, en la barra lateral izquierda.
+1. Ingresar al proyecto de GitLab, ubicar la barra lateral izquierda.
 2. Seleccionar **Settings > CI/CD.**
 3. Expandir la sección **Runners**.
 4. Seleccionar **New project runner**.
@@ -95,29 +92,28 @@ Ingresar al proyecto de GitLab que se utilizará, en la barra lateral izquierda,
 8. Opcional. En la sección de **Configuration**, agregarconfiguraciones adicionales.
 9. Seleccionar **Create runner**.
 
-[](https://docs.gitlab.com/runner/install/docker.html#option-2-use-docker-volumes-to-start-the-runner-container)
+**IMPORTANTE**: Anotar el token generado con formato `glrt-xxxxx`, éste se utilizará para el registro del Runner.
 
-Crear volumen
+### Crear un contenedor con GitLab Runner
+
+De acuerdo a la [documentación](https://docs.gitlab.com/runner/install/docker.html#option-2-use-docker-volumes-to-start-the-runner-container) primero crearémos un volúmen:
 
 ```shell
 docker volume create gitlab-runner-config
 ```
 
-Crear el contenedor
+Luego creamos un contenedor y le asociamos el volúmen recién creado:
 
 ```shell
 docker run -d --name gitlab-runner --restart always \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v gitlab-runner-config:/etc/gitlab-runner \
     gitlab/gitlab-runner:latest
-
 ```
 
-[](https://docs.gitlab.com/runner/register/index.html?tab=Docker#register-with-a-runner-authentication-token)
+### Registrar el Runner
 
-Al finalizar la creación de un nuevo Runner se obtendrá un token con el formato `glrt-xxxxx`. Ingresar ese valor en la variable `$RUNNER_TOKEN` y luego ejecutar el siguiente comando:
-
-`--docker-image docker:dind`
+Para [registrar el Runner con autenticación por Token](https://docs.gitlab.com/runner/register/index.html?tab=Docker#register-with-a-runner-authentication-token) crearémos un contenedor desechable con los valores del nuevo Runner. Ingresar el valor del token generado anteriormente en la [creación del nuevo runner](#crear-un-nuevo-runner) a la variable `$RUNNER_TOKEN`, definir la imagen Docker que se utilizará para los pipelines con el argumento `--docker-image docker:dind`: El comando quedaría así:
 
 ```shell
 docker run --rm -v create gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner register \
@@ -129,21 +125,13 @@ docker run --rm -v create gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-
   --description "docker-runner"
 ```
 
+Con esto se finaliza la configuración del `Runner local`, ahora solo queda visualizar los _logs_ de las tareas que se ejecutan en él:
+
 ```shell
 docker logs gitlab-runner --follow
 ```
 
-En la raíz del proyecto se encuentra el archivo `.gitlab-ci.yml`
-
-```
-.
-├── .gitlab-ci.yml
-├── ...
-```
-
-### [Run GitLab Runner in a container](https://docs.gitlab.com/runner/install/docker.html)
-
-#### Probar el GitLab Runner
+IMPORTANTE: Para canalizar el trabajo de los pipelines a éste Runner es importante desabilitar los Runners compartidos.
 
 ## Docker
 
