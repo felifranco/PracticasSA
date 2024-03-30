@@ -50,13 +50,12 @@ micro_agify_feature:
       changes:
         - micro_agify/*
 
-micro_agify_mr:
+job1:
   stage: integration
-  trigger:
-    include: micro_agify/CI_CD/.test-pipeline.yml
+  script:
+    - echo "This job runs in merge request pipelines"
   rules:
-    - changes:
-        - micro_agify/*
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 # GENDERIZE
 micro_genderize_develop:
