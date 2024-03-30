@@ -1,5 +1,6 @@
 stages:
   - integration
+  - merge_request
 
 print_vars:
   stage: integration
@@ -21,6 +22,13 @@ print_vars:
     - echo "GitLab CI/CD | Print all environment variables"
     - env
 
+merge_request:
+  stage: merge_request
+  trigger:
+    include: .merge-request.yml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
 # AGIFY
 micro_agify_develop:
   stage: integration
@@ -28,6 +36,8 @@ micro_agify_develop:
     include: micro_agify/CI_CD/.agify-develop-pipeline.yml
     #include: micro_agify/CI_CD/.test-pipeline.yml
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
       changes:
         - micro_agify/*
@@ -37,6 +47,8 @@ micro_agify_main:
   trigger:
     include: micro_agify/CI_CD/.agify-main-pipeline.yml
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
       changes:
         - micro_agify/*
@@ -46,16 +58,11 @@ micro_agify_feature:
   trigger:
     include: micro_agify/CI_CD/.agify-feature-pipeline.yml
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
         - micro_agify/*
-
-job1:
-  stage: integration
-  trigger:
-    include: micro_agify/CI_CD/.test-pipeline.yml
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 # GENDERIZE
 micro_genderize_develop:
