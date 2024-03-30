@@ -1,5 +1,5 @@
 stages:
-  - build
+  - test
 #  - test
 #  - post-build
 #  - deploy
@@ -65,4 +65,5 @@ stages:
 #    - env
 
 mr_job:
-  script: echo "MERGE REQUEST JOB"
+  stage: test
+  script: echo "MERGE REQUEST JOB TEST"
