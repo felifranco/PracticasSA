@@ -66,4 +66,5 @@ stages:
 
 mr_job:
   stage: test
-  script: echo "MERGE REQUEST JOB TEST"
+  script:
+    - echo "MERGE REQUEST JOB TEST"
