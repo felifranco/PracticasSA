@@ -3,10 +3,17 @@ stages:
   - test
   - post-build
 
+image: docker:cli
+services:
+  - docker:dind
+
 build_request:
   stage: build
   script:
     - echo "BUILD MR"
+    - echo "$CI_COMMIT_BRANCH"
+    - echo "$CI_COMMIT_REF_NAME"
+    - echo "$CI_OPEN_MERGE_REQUESTS"
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
 
@@ -42,6 +49,6 @@ post:
   stage: post-build
   needs: [test_request]
   script:
-    - echo "POST-BUILD"
+    - echo "POST-BUILD -> Despliegue a kubernetes"
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
