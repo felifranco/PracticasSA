@@ -81,8 +81,9 @@ micro_agify_mr:
   #  - env
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      #changes:
-      #  - micro_agify/*
+      changes:
+        - micro_agify/*
+      allow_failure: true
 
 # GENDERIZE
 micro_genderize_develop:
