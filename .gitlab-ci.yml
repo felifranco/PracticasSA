@@ -51,6 +51,7 @@ micro_agify_feature:
         - micro_agify/*
 
 job1:
+  stage: integration
   script:
     - echo "This job runs in merge request pipelines"
   rules:
