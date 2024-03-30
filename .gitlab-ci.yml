@@ -10,6 +10,9 @@ print_vars:
 # AGIFY
 micro_agify_develop:
   stage: integration
+  script:
+    - echo "GitLab CI/CD | Print all environment variables"
+    - env
   trigger:
     include: micro_agify/CI_CD/.agify-develop-pipeline.yml
     #include: micro_agify/CI_CD/.test-pipeline.yml
@@ -20,6 +23,9 @@ micro_agify_develop:
 
 micro_agify_main:
   stage: integration
+  script:
+    - echo "GitLab CI/CD | Print all environment variables"
+    - env
   trigger:
     include: micro_agify/CI_CD/.agify-main-pipeline.yml
   rules:
