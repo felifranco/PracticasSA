@@ -59,6 +59,10 @@ micro_agify_feature:
 
 micro_agify_mr:
   stage: merge_request
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - micro_agify/*
   trigger:
     include: micro_agify/CI_CD/.merge-request.yml
   #script:
@@ -79,11 +83,6 @@ micro_agify_mr:
   #  - echo "$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_SHA"
   #  - echo "GitLab CI/CD | Print all environment variables"
   #  - env
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      changes:
-        - micro_agify/*
-      allow_failure: true
 
 # GENDERIZE
 micro_genderize_develop:
