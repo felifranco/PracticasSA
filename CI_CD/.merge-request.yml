@@ -14,6 +14,8 @@ build_request:
     - cd "$MICRO_PATH"
     - docker build --pull -t "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG" --file server.Dockerfile .
     - docker push "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG"
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
 
 test_request:
   stage: test
@@ -24,3 +26,5 @@ test_request:
     - cd "$MICRO_PATH"
     - docker compose up --exit-code-from testing
     - docker compose down --rmi all -v --remove-orphans
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
