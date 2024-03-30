@@ -30,8 +30,8 @@ test_main_agify:
   script:
     - cd "$MICRO_PATH"
     #- docker compose up --abort-on-container-exit
-    - docker compose -f main-compose.yaml up --exit-code-from testing
-    - docker compose -f main-compose.yaml down --rmi all -v --remove-orphans
+    - docker compose up --exit-code-from testing
+    - docker compose down --rmi all -v --remove-orphans
 
 deploy_main_agify:
   stage: deploy

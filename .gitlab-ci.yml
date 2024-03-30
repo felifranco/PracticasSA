@@ -2,7 +2,7 @@ stages:
   - integration
   - merge_request
 
-print_vars:
+.print_vars:
   stage: integration
   script:
     - echo "$CI_COMMIT_BRANCH"
@@ -34,7 +34,6 @@ micro_agify_develop:
   stage: integration
   trigger:
     include: micro_agify/CI_CD/.agify-develop-pipeline.yml
-    #include: micro_agify/CI_CD/.test-pipeline.yml
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
