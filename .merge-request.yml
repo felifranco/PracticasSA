@@ -14,6 +14,8 @@ build_request:
     - echo "$CI_COMMIT_REF_NAME"
     - echo "$CI_OPEN_MERGE_REQUESTS"
     - echo "$CI_COMMIT_REF_SLUG"
+    - echo "GitLab CI/CD | Print all environment variables"
+    - env
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
 
@@ -28,7 +30,7 @@ test_request:
   #rules:
   #  - if: $CI_MERGE_REQUEST_ID
 
-post:
+.post:
   stage: post-build
   needs: [test_request]
   script:
