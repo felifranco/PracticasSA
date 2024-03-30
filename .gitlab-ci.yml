@@ -56,12 +56,12 @@ micro_agify_feature:
       changes:
         - micro_agify/*
 
-merge_request_job:
+micro_agify_MR:
   stage: integration
   trigger:
     include: micro_agify/CI_CD/.test-pipeline.yml
-  script:
-    - echo "This job runs in merge request pipelines"
+  #script:
+  #  - echo "This job runs in merge request pipelines"
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
