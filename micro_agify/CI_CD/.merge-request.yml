@@ -1,8 +1,18 @@
 stages:
+  - build
   - test
+  - post-build
+
+build_request:
+  stage: build
+  script:
+    - echo "BUILD MR"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
 
 test_request:
   stage: test
+  needs: [build_request]
   script:
     - echo "TEST MR"
     - echo "This job runs in merge request pipelines"
@@ -23,7 +33,15 @@ test_request:
     - echo "GitLab CI/CD | Print all environment variables"
     - env
   rules:
-    - if: $CI_MERGE_REQUEST_ID
-  # Otra forma de ejecutar cuando éste pipeline se ejecuta a través de "trigger:include"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  # Otra forma de ejecutar éste pipeline que fue llamado desde un padre, es decir un "trigger:include:"
   #rules:
-  #  - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  #  - if: $CI_MERGE_REQUEST_ID
+
+post:
+  stage: post-build
+  needs: [test_request]
+  script:
+    - echo "POST-BUILD"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
