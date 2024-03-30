@@ -4,20 +4,6 @@ stages:
 print_vars:
   stage: integration
   script:
-    - echo "$CI_COMMIT_BRANCH"
-    - echo "$CI_COMMIT_REF_NAME"
-    - echo "$CI_DEFAULT_BRANCH"
-    - echo "$CI_OPEN_MERGE_REQUESTS"
-    - echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"
-    - echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_PROTECTED"
-    - echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA"
-    - echo "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-    - echo "$CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED"
-    - echo "$CI_MERGE_REQUEST_TARGET_BRANCH_SHA"
-    - echo "$CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_NAME"
-    - echo "$CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_SHA"
-    - echo "$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME"
-    - echo "$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_SHA"
     - echo "GitLab CI/CD | Print all environment variables"
     - env
 
@@ -38,6 +24,15 @@ micro_agify_main:
     include: micro_agify/CI_CD/.agify-main-pipeline.yml
   rules:
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
+      changes:
+        - micro_agify/*
+
+micro_agify_feature:
+  stage: integration
+  trigger:
+    include: micro_agify/CI_CD/.agify-feature-pipeline.yml
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
         - micro_agify/*
 
