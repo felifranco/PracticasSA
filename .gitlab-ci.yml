@@ -58,7 +58,7 @@ micro_agify_feature:
         - micro_agify/*
 
 micro_agify_mr:
-  stage: merge_request
+  #stage: merge_request
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
