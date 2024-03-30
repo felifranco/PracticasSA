@@ -9,5 +9,6 @@ build_mr:
 
 test_mr:
   stage: test
+  needs: [build_mr]
   script:
     - echo "TEST MR"
