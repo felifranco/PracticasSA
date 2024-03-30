@@ -1,7 +1,7 @@
 stages:
   - integration
 
-.print_vars:
+print_vars:
   stage: integration
   script:
     - echo "GitLab CI/CD | Print all environment variables"
