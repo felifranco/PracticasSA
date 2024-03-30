@@ -4,15 +4,26 @@ stages:
 print_vars:
   stage: integration
   script:
+    - echo "$CI_COMMIT_BRANCH"
+    - echo "$CI_COMMIT_REF_NAME"
+    - echo "$CI_DEFAULT_BRANCH"
+    - echo "$CI_OPEN_MERGE_REQUESTS"
+    - echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"
+    - echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_PROTECTED"
+    - echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA"
+    - echo "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - echo "$CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED"
+    - echo "$CI_MERGE_REQUEST_TARGET_BRANCH_SHA"
+    - echo "$CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_NAME"
+    - echo "$CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_SHA"
+    - echo "$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME"
+    - echo "$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_SHA"
     - echo "GitLab CI/CD | Print all environment variables"
     - env
 
 # AGIFY
 micro_agify_develop:
   stage: integration
-  script:
-    - echo "GitLab CI/CD | Print all environment variables"
-    - env
   trigger:
     include: micro_agify/CI_CD/.agify-develop-pipeline.yml
     #include: micro_agify/CI_CD/.test-pipeline.yml
@@ -23,9 +34,6 @@ micro_agify_develop:
 
 micro_agify_main:
   stage: integration
-  script:
-    - echo "GitLab CI/CD | Print all environment variables"
-    - env
   trigger:
     include: micro_agify/CI_CD/.agify-main-pipeline.yml
   rules:
