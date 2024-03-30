@@ -7,7 +7,7 @@ describe("GET /", () => {
   console.log(`Testing Server -> ${HOST}`);
   test("Should respond with a 200 status code", async () => {
     const response = await request(`${HOST}/?name=peter`).get("/").send();
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(200);
   });
 
   test("Should have a respond a 'Content-Type': 'application/json' in header", async () => {
