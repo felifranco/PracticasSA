@@ -56,7 +56,6 @@ job1:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
-
 # GENDERIZE
 micro_genderize_develop:
   stage: integration
