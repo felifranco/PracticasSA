@@ -1,0 +1,37 @@
+stages:
+  - build
+  - test
+  - post-build
+
+image: docker:cli
+services:
+  - docker:dind
+
+build_request:
+  stage: build
+  script:
+    - echo "$CI_COMMIT_BRANCH"
+    - echo "$CI_COMMIT_REF_NAME"
+    - echo "$CI_OPEN_MERGE_REQUESTS"
+    - echo "$CI_COMMIT_REF_SLUG"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+
+test_request:
+  stage: test
+  needs: [build_request]
+  script:
+    - echo "Ejecutar TESTS para el merge request"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  # Otra forma de ejecutar éste pipeline que fue llamado desde un padre, es decir un "trigger:include:"
+  #rules:
+  #  - if: $CI_MERGE_REQUEST_ID
+
+post:
+  stage: post-build
+  needs: [test_request]
+  script:
+    - echo "POST-BUILD -> Despliegue a kubernetes"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
