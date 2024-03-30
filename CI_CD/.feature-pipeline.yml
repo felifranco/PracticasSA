@@ -2,14 +2,11 @@ stages:
   - build
   - test
 
-variables:
-  MICRO_PATH: "micro_agify"
-
 image: docker:cli
 services:
   - docker:dind
 
-build_request:
+build_feature:
   stage: build
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
@@ -17,17 +14,13 @@ build_request:
     - cd "$MICRO_PATH"
     - docker build --pull -t "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG" --file server.Dockerfile .
     - docker push "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG"
-  rules:
-    - if: $CI_MERGE_REQUEST_ID
 
-test_request:
+test_feature:
   stage: test
-  needs: [build_request]
+  needs: [build_feature]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - cd "$MICRO_PATH"
     - docker compose up --exit-code-from testing
     - docker compose down --rmi all -v --remove-orphans
-  rules:
-    - if: $CI_MERGE_REQUEST_ID

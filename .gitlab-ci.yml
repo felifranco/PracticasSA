@@ -25,15 +25,18 @@ stages:
 .merge_request:
   stage: merge_request
   trigger:
-    include: .merge-request.yml
+    include: CI_CD/.merge-request.yml
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 # AGIFY
 micro_agify_develop:
   stage: integration
+  variables:
+    MICRO_PATH: "micro_agify"
+    DOCKER_IMAGE_NAME: "f64franco/micro-agify"
   trigger:
-    include: micro_agify/CI_CD/.agify-develop-pipeline.yml
+    include: CI_CD/.develop-pipeline.yml
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -43,8 +46,11 @@ micro_agify_develop:
 
 micro_agify_main:
   stage: integration
+  variables:
+    MICRO_PATH: "micro_agify"
+    DOCKER_IMAGE_NAME: "f64franco/micro-agify"
   trigger:
-    include: micro_agify/CI_CD/.agify-main-pipeline.yml
+    include: CI_CD/.main-pipeline.yml
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -54,8 +60,10 @@ micro_agify_main:
 
 micro_agify_feature:
   stage: integration
+  variables:
+    MICRO_PATH: "micro_agify"
   trigger:
-    include: micro_agify/CI_CD/.agify-feature-pipeline.yml
+    include: CI_CD/.feature-pipeline.yml
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -65,8 +73,11 @@ micro_agify_feature:
 
 micro_agify_merge_request:
   stage: merge_request
+  variables:
+    MICRO_PATH: "micro_agify"
   trigger:
-    include: micro_agify/CI_CD/.agify-mr-pipeline.yml
+    #include: CI_CD/.merge-request.yml
+    include: CI_CD/.feature-pipeline.yml
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
