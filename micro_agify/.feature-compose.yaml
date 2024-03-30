@@ -3,7 +3,7 @@ services:
     #build:
     #  context: ./
     #  dockerfile: server.Dockerfile
-    image: "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_BRANCH"
+    image: "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG"
     container_name: agify_server
     environment:
       - HOST=0.0.0.0
