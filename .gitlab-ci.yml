@@ -22,7 +22,7 @@ stages:
     - echo "GitLab CI/CD | Print all environment variables"
     - env
 
-merge_request:
+.merge_request:
   stage: merge_request
   trigger:
     include: .merge-request.yml
@@ -60,6 +60,15 @@ micro_agify_feature:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
+      changes:
+        - micro_agify/*
+
+micro_agify_merge_request:
+  stage: merge_request
+  trigger:
+    include: micro_agify/CI_CD/.agify-feature-pipeline.yml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - micro_agify/*
 
