@@ -50,6 +50,11 @@ micro_agify_feature:
       changes:
         - micro_agify/*
 
+micro_agify_mr:
+  stage: integration
+  trigger:
+    include: micro_agify/CI_CD/.test-pipeline.yml
+
 # GENDERIZE
 micro_genderize_develop:
   stage: integration
