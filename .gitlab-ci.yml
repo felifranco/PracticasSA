@@ -76,8 +76,9 @@ micro_agify_merge_request:
   variables:
     MICRO_PATH: "micro_agify"
   trigger:
-    #include: CI_CD/.merge-request.yml
-    include: CI_CD/.feature-pipeline.yml
+    include: CI_CD/.merge-request.yml
+    #include: CI_CD/.feature-pipeline.yml
+    strategy: depend
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
