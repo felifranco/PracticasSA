@@ -30,6 +30,6 @@ app.get("/", (req, res) => {
 
 app.listen(port, host, () => {
   console.log(
-    `\nAgify Server running at http://${host}:${port}/.\nSee the documentation at http://${host}:${port}${docs}`
+    `\nAgify server running at http://${host}:${port}/.\nSee the documentation at http://${host}:${port}${docs}`
   );
 });

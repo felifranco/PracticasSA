@@ -27,4 +27,3 @@ test_feature:
     - cd "$MICRO_PATH"
     - docker compose -f feature-compose.yaml up --exit-code-from testing
     - docker compose -f feature-compose.yaml down --rmi all -v --remove-orphans
-    - docker rmi "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG"
