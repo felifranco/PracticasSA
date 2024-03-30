@@ -1,0 +1,13 @@
+stages:
+  - build
+  - test
+
+build_mr:
+  stage: build
+  script:
+    - echo "BUILD MR"
+
+test_mr:
+  stage: test
+  script:
+    - echo "TEST MR"
