@@ -6,6 +6,8 @@ build_mr:
   stage: build
   script:
     - echo "BUILD MR"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
 
 test_mr:
   stage: test
