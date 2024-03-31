@@ -1,10 +1,49 @@
-# Práctica 2 - Software avanzado
+# Prácticas - Laboratorio Software avanzado
+
+Enunciados:
+
+- [Práctica 2](./assets/enunciados/[SA]%20Practica%202%20-%201s2024.pdf)
+- [Práctica 3](./assets/enunciados/[SA]%20Practica%203%20-%201s2024.pdf)
+
+## TABLA DE CONTENIDO
+
+- [Arquitectura](#arquitectura)
+  - [Diagrama](#diagrama)
+  - [Tecnología utilizada](#tectología-utilizada)
+- [Microservicios](#microservicios)
+  - [Estructura de los proyectos](#estructura-de-los-proyectos)
+    - [Tests](#tests)
+  - [Contrato de microservicios](#contrato-de-microservicios)
+- [Dockerfile](#dockerfile)
+  - [Crear la imagen](#crear-la-imagen)
+- [Minikube](#minikube)
+  - [Instalación de Minikube](#instalación-de-minikube)
+  - [Iniciar Minikube](#iniciar-minikube)
+  - [Desplegar servicios](#desplegar-servicios)
+    - [Microservicio Agify]()
+    - [Microservicio Genderize]()
+    - [Middleware]()
+- [GCP](#gcp)
+  - [Lanzar proyecto en Kubernetes](#lanzar-proyecto-en-kubernetes)
+  - [Conectar a GCP a través de la terminal](#conectar-a-gcp-a-través-de-la-terminal)
+    - [Contenido del paquete](#contenido-del-paquete)
+    - [Instalación](#instalación)
+    - [Kubernetes desde GCP](#kubernetes-desde-gcp)
+- [CI/CD](#cicd)
 
 ## Arquitectura
 
+### Diagrama
+
 ![Arquitectura](./assets/Practica%202%20-%20SA.png)
 
-## Creación de los microservicios
+### Tectología utilizada
+
+TODO:Generar el contenido
+
+## Microservicios
+
+### Estructura de los proyectos
 
 A cada microservicio ejecutarle:
 
@@ -98,6 +137,14 @@ HOST=localhost
 PORT=3011
 ```
 
+#### Tests
+
+TODO: Generar el contenido
+
+### Contrato de microservicios
+
+TODO: Generar el contenido
+
 ## Dockerfile
 
 Una vez completado los microservicios procedemos a crear la imágen de docker. El siguiente es un ejemplo del Dockerfile para el microservicio 1:
@@ -115,7 +162,7 @@ COPY ./server.js ./
 CMD ["npm", "run", "start"]
 ```
 
-## Crear la imágen
+### Crear la imagen
 
 Ubicarse dentro de la carpeta del microservicio
 
@@ -136,6 +183,8 @@ docker run -d --name micro1 -p 3000:3000 --env HOST=0.0.0.0 --env PORT=3000 f64f
 ```
 
 ## Minikube
+
+### Instalación de Minikube
 
 Se instalará _Minikube_ a partir de la [documentación oficial](https://minikube.sigs.k8s.io/docs/start/) para simular un ambiente con Kubernetes.
 
@@ -179,6 +228,10 @@ $ minikube service micro1-deployment --url
 
 Mavegador: `http://192.168.49.2:30741`
 Probando API: `http://192.168.49.2:30741/?name=peter`
+
+#### Microservicio Genderize
+
+#### Middleware
 
 ## GCP
 
@@ -235,11 +288,11 @@ kubectl get service
 
 https://cloud.google.com/sdk/docs/install?hl=es-419#rpm
 
-##### Contenido del paquete
+#### Contenido del paquete
 
 La CLI de gcloud está disponible en formato de paquete para instalarla en sistemas Red Hat Enterprise Linux 7, 8 y 9; Fedora 33 y 34; y CentOS 7 y 8. Este paquete solo contiene los comandos gcloud, gcloud alpha, gcloud beta, gsutil y bq. No incluye kubectl ni las extensiones de App Engine necesarias para implementar una aplicación mediante comandos de gcloud, los que se pueden instalar por separado como se describe más adelante en esta sección.
 
-##### Instalación
+#### Instalación
 
 1. Actualiza el DNF con la información del repositorio de gcloud CLI. El siguiente comando de muestra es para una instalación compatible con Red Hat Enterprise Linux 9, pero asegúrate de actualizar la configuración según sea necesario para tu configuración:
 
@@ -314,7 +367,7 @@ Cambia a una versión inferior de la gcloud CLI
 
 Si deseas volver a una versión específica de gcloud CLI, en la que VERSION tiene el formato 123.0.0, ejecuta: sudo dnf downgrade google-cloud-cli-VERSION Las diez actualizaciones más recientes siempre estarán disponibles en el repositorio. NOTA: Para las versiones anteriores a la 371.0.0, el nombre del paquete es google-cloud-sdk.
 
-##### Kubernetes desde GCP
+#### Kubernetes desde GCP
 
 https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl?hl=es-419#install_plugin
 
@@ -327,3 +380,7 @@ sudo yum install google-cloud-sdk-gke-gcloud-auth-plugin
 ```
 gke-gcloud-auth-plugin --version
 ```
+
+## CI/CD
+
+La documentación de **Continuous Integration and Continuous Deployment** para éste proyecto se encuentra en el archivo [CI-CD.md](CI-CD.md).

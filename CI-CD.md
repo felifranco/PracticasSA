@@ -1,4 +1,39 @@
-# Continuous Integration
+# Continuous Integration and Continuous Deployment
+
+## TABLA DE CONTENIDO
+
+- [Docker Compose](#docker-compose)
+- [Pipelines](#pipelines)
+- [GitLab Runner](#gitlab-runner)
+  - [Crear un nuevo `Runner`](#crear-un-nuevo-runner)
+  - [Crear un contenedor con GitLab Runner](#crear-un-contenedor-con-gitlab-runner)
+  - [Registrar el Runner](#registrar-el-runner)
+  - [Eliminar registro del Runner](#eliminar-registro-del-runner)
+- [Kubernetes Cluster](#kubernetes-cluster)
+- [Notas](#notas)
+- [Referencias](#referencias)
+
+## Docker Compose
+
+```shell
+sudo dnf install docker-compose
+```
+
+```shell
+docker build --tag micro_agify -f server.Dockerfile .
+
+docker run -d --name m_agify -p 3000:3000 --env HOST=0.0.0.0 --env PORT=3000 micro_agify:latest
+```
+
+```shell
+docker build --tag testing_agify -f testing.Dockerfile .
+
+docker run --name t_agify testing_agify
+
+docker run --name t_agify --env SERVER="http://172.17.0.1:3011" testing_agify
+```
+
+## Pipelines
 
 Repo > Build > Pipelines > Use Docker template
 
@@ -231,38 +266,27 @@ docker logs gitlab-runner --follow
 
 **IMPORTANTE**: Para canalizar el trabajo de los pipelines a éste Runner es importante desabilitar los Runners compartidos.
 
+### Eliminar registro del Runner
 
-### Eliminar registro
 https://docs.gitlab.com/runner/commands/#gitlab-runner-unregister
+
 ```shell
 gitlab-runner unregister --url "https://gitlab.com/" --token t0k3n
 gitlab-runner unregister --name test-runner
 
 ```
 
-## Docker Compose
+## Kubernetes Cluster
+
+# Notas
 
 ```shell
-sudo dnf install docker-compose
-```
-
-```shell
-docker build --tag micro_agify -f server.Dockerfile .
-
-docker run -d --name m_agify -p 3000:3000 --env HOST=0.0.0.0 --env PORT=3000 micro_agify:latest
-```
-
-```shell
-docker build --tag testing_agify -f testing.Dockerfile .
-
-docker run --name t_agify testing_agify
-
-docker run --name t_agify --env SERVER="http://172.17.0.1:3011" testing_agify
-```
-
 npm install -D jest supertest
+```
 
+```shell
 git checkout -b feature/fun_14 && git push -u origin feature/fun_14
+```
 
 # Referencias
 
