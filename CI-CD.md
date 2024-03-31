@@ -121,7 +121,7 @@ docker run --rm -v create gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-
   --url "https://gitlab.com/" \
   --token "$RUNNER_TOKEN" \
   --executor "docker" \
-  --docker-image docker:dind \
+  --docker-image docker:25.0.5 \
   --description "docker-runner"
 ```
 
