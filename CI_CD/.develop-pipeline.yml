@@ -4,15 +4,11 @@ stages:
   - post-build
   - deploy
 
-variables:
-  MICRO_PATH: "micro_agify"
-  DOCKER_IMAGE_NAME: "f64franco/micro-agify"
-
 image: docker:cli
 services:
   - docker:dind
 
-build_develop_agify:
+build_develop:
   stage: build
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
@@ -21,9 +17,9 @@ build_develop_agify:
     - docker build --pull -t "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME" --file server.Dockerfile .
     - docker push "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME"
 
-test_develop_agify:
+test_develop:
   stage: test
-  needs: [build_develop_agify]
+  needs: [build_develop]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -32,9 +28,9 @@ test_develop_agify:
     - docker compose up --exit-code-from testing
     - docker compose down --rmi all -v --remove-orphans
 
-post_build_agify:
+post_build:
   stage: post-build
-  needs: [test_develop_agify]
+  needs: [test_develop]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -44,8 +40,8 @@ post_build_agify:
     - docker push "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
     - docker rmi "$CI_REGISTRY_IMAGE/$MICRO_PATH:$DEVELOP_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME"
 
-deploy_develop_agify:
+deploy_develop:
   stage: deploy
-  needs: [post_build_agify]
+  needs: [post_build]
   script:
     - echo "Deploy to Kubernetes"

@@ -2,9 +2,6 @@ stages:
   - build
   - test
 
-variables:
-  MICRO_PATH: "micro_agify"
-
 image: docker:cli
 services:
   - docker:dind

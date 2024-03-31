@@ -5,15 +5,11 @@ stages:
   - deploy
   - delivery
 
-variables:
-  MICRO_PATH: "micro_agify"
-  DOCKER_IMAGE_NAME: "f64franco/micro-agify"
-
 image: docker:cli
 services:
   - docker:dind
 
-build_main_agify:
+build_main:
   stage: build
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
@@ -22,9 +18,9 @@ build_main_agify:
     - docker build --pull -t "$CI_REGISTRY_IMAGE/$MICRO_PATH:$MAIN_BRANCH_NAME" --file server.Dockerfile .
     - docker push "$CI_REGISTRY_IMAGE/$MICRO_PATH:$MAIN_BRANCH_NAME"
 
-test_main_agify:
+test_main:
   stage: test
-  needs: [build_main_agify]
+  needs: [build_main]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -33,9 +29,9 @@ test_main_agify:
     - docker compose up --exit-code-from testing
     - docker compose down --rmi all -v --remove-orphans
 
-deploy_main_agify:
+deploy_main:
   stage: deploy
-  needs: [test_main_agify]
+  needs: [test_main]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
