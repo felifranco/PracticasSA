@@ -1,9 +1,10 @@
 services:
   agify:
-    #build:
-    #  context: ../micro_agify
-    #  dockerfile: server.Dockerfile
-    image: "$CI_REGISTRY_IMAGE/micro_agify:$MAIN_BRANCH_NAME"
+    build:
+      context: ../micro_agify
+      dockerfile: server.Dockerfile
+    #Utilizar el Dockerfile porque puede que los pipelines de cada microservicio no hayan finalizado ni actualizado la imagen correspondiente.
+    #image: "$CI_REGISTRY_IMAGE/micro_agify:$DEVELOP_BRANCH_NAME"
     container_name: agify_server
     environment:
       - HOST=0.0.0.0
@@ -16,10 +17,11 @@ services:
       start_period: 20s
       timeout: 15s
   genderize:
-    #build:
-    #  context: ../micro_genderize
-    #  dockerfile: server.Dockerfile
-    image: "$CI_REGISTRY_IMAGE/micro_genderize:$MAIN_BRANCH_NAME"
+    build:
+      context: ../micro_genderize
+      dockerfile: server.Dockerfile
+    #Utilizar el Dockerfile porque puede que los pipelines de cada microservicio no hayan finalizado ni actualizado la imagen correspondiente.
+    #image: "$CI_REGISTRY_IMAGE/micro_genderize:$DEVELOP_BRANCH_NAME"
     container_name: genderize_server
     environment:
       - HOST=0.0.0.0
@@ -38,7 +40,7 @@ services:
     #  args:
     #    - MICRO_AGIFY=http://agify_server:3000
     #    - MICRO_GENDERIZE=http://genderize_server:3000
-    image: "$CI_REGISTRY_IMAGE/$MICRO_PATH:$MAIN_BRANCH_NAME"
+    image: "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG"
     container_name: middleware_server
     environment:
       - HOST=0.0.0.0

@@ -23,13 +23,6 @@ stages:
     - echo "GitLab CI/CD | Print all environment variables"
     - env
 
-.merge_request:
-  stage: merge_request
-  trigger:
-    include: CI_CD/.merge-request.yml
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-
 # AGIFY
 micro_agify_develop:
   stage: integration
@@ -141,18 +134,53 @@ micro_genderize_merge_request:
 # MIDDLEWARE
 micro_middleware_develop:
   stage: integration
+  variables:
+    MICRO_PATH: "middleware"
+    DOCKER_IMAGE_NAME: "f64franco/middleware"
   trigger:
-    include: middleware/CI_CD/.middleware-develop-pipeline.yml
+    include: CI_CD/.develop-pipeline.yml
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
       changes:
         - middleware/*
 
 micro_middleware_main:
   stage: integration
+  variables:
+    MICRO_PATH: "middleware"
+    DOCKER_IMAGE_NAME: "f64franco/middleware"
   trigger:
-    include: middleware/CI_CD/.middleware-main-pipeline.yml
+    include: CI_CD/.main-pipeline.yml
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
+      changes:
+        - middleware/*
+
+micro_middleware_feature:
+  stage: feature
+  variables:
+    MICRO_PATH: "middleware"
+  trigger:
+    include: CI_CD/.feature-pipeline.yml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
+      changes:
+        - middleware/*
+
+micro_middleware_merge_request:
+  stage: merge_request
+  variables:
+    MICRO_PATH: "middleware"
+  trigger:
+    include: CI_CD/.merge-request.yml
+    strategy: depend
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
         - middleware/*
