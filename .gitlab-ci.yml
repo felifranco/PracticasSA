@@ -64,7 +64,7 @@ micro_agify_feature:
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
         - micro_agify/**/*
-      when: never
+    - when: never
 
 micro_agify_merge_request:
   stage: merge_request
@@ -119,7 +119,7 @@ micro_genderize_feature:
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
         - micro_genderize/**/*
-      when: never
+    - when: never
 
 micro_genderize_merge_request:
   stage: merge_request
@@ -174,7 +174,7 @@ micro_middleware_feature:
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
         - middleware/**/*
-      when: never
+    - when: never
 
 micro_middleware_merge_request:
   stage: merge_request
