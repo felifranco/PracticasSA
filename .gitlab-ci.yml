@@ -3,7 +3,7 @@ stages:
   - merge_request
   - feature
 
-.print_vars:
+print_vars:
   stage: integration
   script:
     - echo "$CI_COMMIT_BRANCH"
