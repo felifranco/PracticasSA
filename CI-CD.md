@@ -140,8 +140,7 @@ gitlab-runner register
 y completar los datos solicitados. Además del ingreso de los datos tuve que hacer una modificación al archivo de configuración `config.toml` porque _GitLab Runner_ no tenía vinculado el volúmen de mi docker local y no tenía permisos de crear contenedores así que primero instalé un editor de texto con los siguientes comandos:
 
 ```shell
-apt update
-apt install nano
+apt update && apt install nano
 ```
 
 Antes de la modificación el archivo se encuentra así:
@@ -231,6 +230,15 @@ docker logs gitlab-runner --follow
 ```
 
 **IMPORTANTE**: Para canalizar el trabajo de los pipelines a éste Runner es importante desabilitar los Runners compartidos.
+
+
+### Eliminar registro
+https://docs.gitlab.com/runner/commands/#gitlab-runner-unregister
+```shell
+gitlab-runner unregister --url "https://gitlab.com/" --token t0k3n
+gitlab-runner unregister --name test-runner
+
+```
 
 ## Docker Compose
 

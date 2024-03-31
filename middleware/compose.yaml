@@ -5,7 +5,7 @@ services:
       dockerfile: server.Dockerfile
     #Utilizar el Dockerfile porque puede que los pipelines de cada microservicio no hayan finalizado ni actualizado la imagen correspondiente.
     #image: "$CI_REGISTRY_IMAGE/micro_agify:$DEVELOP_BRANCH_NAME"
-    container_name: agify_server
+    container_name: middleware_agify_server
     environment:
       - HOST=0.0.0.0
       - PORT=3000
@@ -22,7 +22,7 @@ services:
       dockerfile: server.Dockerfile
     #Utilizar el Dockerfile porque puede que los pipelines de cada microservicio no hayan finalizado ni actualizado la imagen correspondiente.
     #image: "$CI_REGISTRY_IMAGE/micro_genderize:$DEVELOP_BRANCH_NAME"
-    container_name: genderize_server
+    container_name: middleware_genderize_server
     environment:
       - HOST=0.0.0.0
       - PORT=3000
@@ -38,15 +38,15 @@ services:
     #  context: ./
     #  dockerfile: server.Dockerfile
     #  args:
-    #    - MICRO_AGIFY=http://agify_server:3000
-    #    - MICRO_GENDERIZE=http://genderize_server:3000
+    #    - MICRO_AGIFY=http://middleware_agify_server:3000
+    #    - MICRO_GENDERIZE=http://middleware_genderize_server:3000
     image: "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG"
     container_name: middleware_server
     environment:
       - HOST=0.0.0.0
       - PORT=3000
-      - MICRO_AGIFY=http://agify_server:3000
-      - MICRO_GENDERIZE=http://genderize_server:3000
+      - MICRO_AGIFY=http://middleware_agify_server:3000
+      - MICRO_GENDERIZE=http://middleware_genderize_server:3000
     healthcheck:
       #test: wget --no-verbose --tries=1 --spider http://localhost:3000/api || exit 1
       test: curl -f http://localhost:3000/api
