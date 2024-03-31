@@ -254,6 +254,8 @@ docker run --name t_agify --env SERVER="http://172.17.0.1:3011" testing_agify
 
 npm install -D jest supertest
 
+git checkout -b feature/fun_14 && git push -u origin feature/fun_14
+
 # Referencias
 
 [GitLab CI/CD - Providing your own docker runners](https://www.youtube.com/watch?v=Y0qT6MCnRG0)
