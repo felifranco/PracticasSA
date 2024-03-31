@@ -61,6 +61,8 @@ micro_agify_feature:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
+    - if: $CI_COMMIT_BEFORE_SHA == "0000000000000000000000000000000000000000"
+      when: never
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
         - micro_agify/**/*
@@ -172,6 +174,8 @@ micro_middleware_feature:
     include: CI_CD/.feature-pipeline.yml
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_BEFORE_SHA == "0000000000000000000000000000000000000000"
       when: never
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
