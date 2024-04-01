@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hello-world
-  namespace: gitlab-runners-namespace
+  namespace: $NAMESPACE
 spec:
   selector:
     app: hello-world

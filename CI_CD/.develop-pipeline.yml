@@ -45,5 +45,9 @@ deploy_develop:
   image: bitnami/kubectl
   needs: [post_build]
   script:
+    - echo "KUBERNETES_FILES -> $KUBERNETES_FILES"
     - ls -l
     - echo "Deploy to Kubernetes"
+    - cd GitLabRunner
+    - cat hello-world.yaml
+    - kubectl apply -f hello-world.yaml

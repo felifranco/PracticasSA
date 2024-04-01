@@ -30,6 +30,7 @@ micro_agify_develop:
     MICRO_PATH: "micro_agify"
     DOCKER_IMAGE_NAME: "f64franco/micro-agify"
     NAMESPACE: "development"
+    KUBERNETES_FILES: "$MICRO_PATH/kubernetes"
   trigger:
     include: CI_CD/.develop-pipeline.yml
   rules:
@@ -45,6 +46,7 @@ micro_agify_main:
     MICRO_PATH: "micro_agify"
     DOCKER_IMAGE_NAME: "f64franco/micro-agify"
     NAMESPACE: "production"
+    KUBERNETES_FILES: "$MICRO_PATH/kubernetes"
   trigger:
     include: CI_CD/.main-pipeline.yml
   rules:
@@ -89,6 +91,7 @@ micro_genderize_develop:
     MICRO_PATH: "micro_genderize"
     DOCKER_IMAGE_NAME: "f64franco/micro-genderize"
     NAMESPACE: "development"
+    KUBERNETES_FILES: "$MICRO_PATH/kubernetes"
   trigger:
     include: CI_CD/.develop-pipeline.yml
   rules:
@@ -104,6 +107,7 @@ micro_genderize_main:
     MICRO_PATH: "micro_genderize"
     DOCKER_IMAGE_NAME: "f64franco/micro-genderize"
     NAMESPACE: "production"
+    KUBERNETES_FILES: "$MICRO_PATH/kubernetes"
   trigger:
     include: CI_CD/.main-pipeline.yml
   rules:
@@ -148,6 +152,7 @@ micro_middleware_develop:
     MICRO_PATH: "middleware"
     DOCKER_IMAGE_NAME: "f64franco/middleware"
     NAMESPACE: "development"
+    KUBERNETES_FILES: "$MICRO_PATH/kubernetes"
   trigger:
     include: CI_CD/.develop-pipeline.yml
   rules:
@@ -163,6 +168,7 @@ micro_middleware_main:
     MICRO_PATH: "middleware"
     DOCKER_IMAGE_NAME: "f64franco/middleware"
     NAMESPACE: "production"
+    KUBERNETES_FILES: "$MICRO_PATH/kubernetes"
   trigger:
     include: CI_CD/.main-pipeline.yml
   rules:
