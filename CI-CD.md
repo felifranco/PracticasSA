@@ -309,24 +309,25 @@ Crear el archivo `config.yaml` en la siguiente ubicación:
 .gitlab/agents/<agent-name>/config.yaml
 ```
 
+El contenido del archivo para que se [autorice al agente el acceso al proyecto](https://docs.gitlab.com/ee/user/clusters/agent/ci_cd_workflow.html#authorize-the-agent-to-access-your-projects) será:
+
+```yaml
+ci_access:
+  projects:
+    - id: path/to/project
+```
+
 A este proyecto se le creó el agente `agente-practicas`.
 
 ##### [Registrar el agente con GitLab](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html#create-an-agent-configuration-file)
-
-#### Agregar el Clúster de Kubernetes en GitLab.
 
 En esta ocasión se agregará el Clúster de Kubernetes únicamente a éste proyecto, GitLab permite asociarlo también a grupos o a la cuenta. Para agregarlo se siguen los siguientes pasos:
 
 1. Ingresar al proyecto de GitLab, ubicar la barra lateral izquierda.
 2. Seleccionar **Operate > Kubernetes clusters**
-3. Persionar sobre **[GitLab agent](https://docs.gitlab.com/ee/user/clusters/agent/index.html)**.
-4. Expandir la sección **Runners**.
-5. Seleccionar **New project runner**.
-6. Seleccionar el **Sistema Operativo** donde GitLab Runner está instalado. En nuestro caso será **Linux** puesto que utilizamos una imagen de Docker con ese OS.
-7. En la sección de Tags, en el campo de Tags, ingresar las etiquetas de trabajo para especificarle al runner cuáles puede ejecutar. Si no hay etiquetas de trabajo para el runner entonces seleccionar **Run untagged jobs**.
-8. Opcional. En el campo de **descripción** del Runner, agregar una descripción para el Runner que se mostrará en GitLab.
-9. Opcional. En la sección de **Configuration**, agregarconfiguraciones adicionales.
-10. Seleccionar **Create runner**.
+3. Persionar sobre **Connect a cluster**.
+4. Expandir el listado **Select an agent or enter a name to create new**, ahí debería de aparecer el agente creado en la sección [Crear un archivo de configuración para un agente](#crear-un-archivo-de-configuración-para-un-agente)
+5. Presionar en **Register**.
 
 # Notas
 
