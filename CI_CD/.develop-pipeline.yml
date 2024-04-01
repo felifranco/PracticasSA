@@ -44,5 +44,6 @@ deploy_develop:
   stage: deploy
   needs: [post_build]
   script:
+    - ls -l
     - echo "Deploy to Kubernetes"
     - kubectl apply -f hello-world.yaml
