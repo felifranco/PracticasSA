@@ -47,4 +47,5 @@ deploy_develop:
   script:
     - ls -l
     - echo "Deploy to Kubernetes"
+    - cd GitLabRunner
     - kubectl apply -f hello-world.yaml
