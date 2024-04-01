@@ -29,6 +29,7 @@ micro_agify_develop:
   variables:
     MICRO_PATH: "micro_agify"
     DOCKER_IMAGE_NAME: "f64franco/micro-agify"
+    NAMESPACE: "development"
   trigger:
     include: CI_CD/.develop-pipeline.yml
   rules:
@@ -43,6 +44,7 @@ micro_agify_main:
   variables:
     MICRO_PATH: "micro_agify"
     DOCKER_IMAGE_NAME: "f64franco/micro-agify"
+    NAMESPACE: "production"
   trigger:
     include: CI_CD/.main-pipeline.yml
   rules:
@@ -86,6 +88,7 @@ micro_genderize_develop:
   variables:
     MICRO_PATH: "micro_genderize"
     DOCKER_IMAGE_NAME: "f64franco/micro-genderize"
+    NAMESPACE: "development"
   trigger:
     include: CI_CD/.develop-pipeline.yml
   rules:
@@ -100,6 +103,7 @@ micro_genderize_main:
   variables:
     MICRO_PATH: "micro_genderize"
     DOCKER_IMAGE_NAME: "f64franco/micro-genderize"
+    NAMESPACE: "production"
   trigger:
     include: CI_CD/.main-pipeline.yml
   rules:
@@ -143,6 +147,7 @@ micro_middleware_develop:
   variables:
     MICRO_PATH: "middleware"
     DOCKER_IMAGE_NAME: "f64franco/middleware"
+    NAMESPACE: "development"
   trigger:
     include: CI_CD/.develop-pipeline.yml
   rules:
@@ -157,6 +162,7 @@ micro_middleware_main:
   variables:
     MICRO_PATH: "middleware"
     DOCKER_IMAGE_NAME: "f64franco/middleware"
+    NAMESPACE: "production"
   trigger:
     include: CI_CD/.main-pipeline.yml
   rules:
