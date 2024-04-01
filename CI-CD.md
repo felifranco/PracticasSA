@@ -39,16 +39,6 @@ Repo > Build > Pipelines > Use Docker template
 
 Crear el archivo `.gitlab-ci.yml`
 
-https://docs.gitlab.com/ee/ci/yaml/index.html
-
-https://docs.gitlab.com/ee/ci/pipelines/pipeline_architectures.html#basic-pipelines
-
-https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-
-https://docs.gitlab.com/ee/ci/variables/
-
-https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
-
 ```yml
 # This file is a template, and might need editing before it works on your project.
 # To contribute improvements to CI/CD templates, please follow the Development guide at:
@@ -148,7 +138,7 @@ docker run -d --name gitlab-runner --restart always \
 
 ### Registrar el Runner
 
-Para [registrar el Runner con autenticación por Token](https://docs.gitlab.com/runner/register/index.html?tab=Docker#register-with-a-runner-authentication-token) crearémos un contenedor desechable con los valores del nuevo Runner. Ingresar el valor del token generado anteriormente en la [creación del nuevo runner](#crear-un-nuevo-runner) a la variable `$RUNNER_TOKEN`, definir la imagen Docker que se utilizará para los pipelines con el argumento `--docker-image docker:dind`: El comando quedaría así:
+Para [registrar el Runner con autenticación por Token](https://docs.gitlab.com/runner/register/index.html?tab=Docker#register-with-a-runner-authentication-token) crearémos un contenedor desechable con los valores del nuevo Runner. Ingresar el valor del token generado anteriormente en la [creación del nuevo runner](#crear-un-nuevo-runner) a la variable `$RUNNER_TOKEN`, definir la imagen Docker que se utilizará para los pipelines con el argumento `--docker-image docker:25.0.5`: El comando quedaría así:
 
 ```shell
 docker run --rm -v create gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner register \
@@ -266,28 +256,24 @@ docker logs gitlab-runner --follow
 
 **IMPORTANTE**: Para canalizar el trabajo de los pipelines a éste Runner es importante desabilitar los Runners compartidos.
 
-### Eliminar registro del Runner
-
-https://docs.gitlab.com/runner/commands/#gitlab-runner-unregister
+### [Eliminar registro del Runner](https://docs.gitlab.com/runner/commands/#gitlab-runner-unregister)
 
 ```shell
 gitlab-runner unregister --url "https://gitlab.com/" --token t0k3n
 gitlab-runner unregister --name test-runner
-
 ```
 
-## Kubernetes Cluster
+## GitLab con Kubernetes
 
 Para ejecutar los pipelines de GitLab se pueden utilizar los [Kubernetes executor](https://docs.gitlab.com/runner/executors/kubernetes/). Para esta tarea utilizaremos una Instancia de GitLab Runner oficial para ejecutar en Kubernetes, se utilizará [Helm](https://helm.sh/) para hacer la instalación del recurso según la documentación [GitLab Runner Helm Chart](https://docs.gitlab.com/runner/install/kubernetes.html)
 
 ### Requisitos
 
-- [Crear un nuevo clúster de Kubernetes](./README.md#crear-un-nuevo-clúster-de-kubernetes) como se detalla en el archivo [README.md](./README.md#crear-un-nuevo-clúster-de-kubernetes)
-- `kubectl` CLI instalado localmente.
+- [Crear un nuevo clúster de Kubernetes](./README.md#crear-un-nuevo-clúster-de-kubernetes) como se detalla en el archivo [README.md](./README.md#crear-un-nuevo-clúster-de-kubernetes).
 
 ### Instalación de GitLab Runner en Kubernetes
 
-#### Versión de Kubernetes
+#### Versión de `kubectl`
 
 ```shell
 $ kubectl version
@@ -383,6 +369,13 @@ gitlab-agent-agente-practicas   Active   12m
 ...
 ```
 
+```shell
+$ kubectl get pods -n gitlab-agent-agente-practicas
+NAME                                                READY   STATUS    RESTARTS   AGE
+agente-practicas-gitlab-agent-v2-56f7467558-qsnv5   1/1     Running   0          144m
+agente-practicas-gitlab-agent-v2-56f7467558-rf8px   1/1     Running   0          144m
+```
+
 # Notas
 
 ```shell
@@ -398,3 +391,8 @@ git checkout -b feature/fun_14 && git push -u origin feature/fun_14
 - [GitLab CI/CD - Providing your own docker runners](https://www.youtube.com/watch?v=Y0qT6MCnRG0)
 - [GitLab CI CD | Install and Configure GitLab Runner on Kubernetes with Helm](https://www.youtube.com/watch?v=0Fes86qtBSc)
 - [Gitlab CI / CD con Google Kubernetes Engine: cómo crear un clúster de GKE y agregarlo a Gitlab](https://www.youtube.com/watch?v=9TaZtZhrykU)
+- [CI/CD YAML syntax reference](https://docs.gitlab.com/ee/ci/yaml/index.html)
+- [Pipeline architecture](https://docs.gitlab.com/ee/ci/pipelines/pipeline_architectures.html#basic-pipelines)
+- [CI/CD YAML syntax reference - stages](https://docs.gitlab.com/ee/ci/yaml/index.html#stages)
+- [GitLab CI/CD variables](https://docs.gitlab.com/ee/ci/variables/)
+- [Predefined CI/CD variables reference](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)
