@@ -1,12 +1,13 @@
 # Prácticas - Laboratorio Software avanzado
 
-Enunciados:
-
-- [Práctica 2](./assets/enunciados/[SA]%20Practica%202%20-%201s2024.pdf)
-- [Práctica 3](./assets/enunciados/[SA]%20Practica%203%20-%201s2024.pdf)
-
 ## TABLA DE CONTENIDO
 
+- [Acerca del proyecto](#acerca-del-proyecto)
+  - [Práctica 2](#práctica-2)
+    - [Diagrama de arquitectura a implementar](#diagrama-de-arquitectura-a-implementar-en-la-práctica-2)
+  - [Práctica 3](#práctica-3)
+    - [Diagrama de arquitectura a implementar](#diagrama-de-arquitectura-a-implementar-en-la-práctica-3)
+    - [Descripción del flujo](#descripción-del-flujo)
 - [Arquitectura](#arquitectura)
   - [Diagrama](#diagrama)
   - [Tecnología utilizada](#tectología-utilizada)
@@ -30,6 +31,29 @@ Enunciados:
     - [Instalación](#instalación)
     - [Kubernetes desde GCP](#kubernetes-desde-gcp)
 - [CI/CD](#cicd)
+
+## Acerca del proyecto
+
+### Práctica 2
+
+#### Diagrama de arquitectura a implementar en la práctica 2
+
+![Diagrama de arquitectura a implementar](./assets/Diagrama_requerido_practica_2.png)
+
+### Práctica 3
+
+#### Diagrama de arquitectura a implementar en la práctica 3
+
+![Diagrama de arquitectura a implementar](./assets/diagrama_requerido_practica_3.png)
+
+#### Descripción del flujo
+
+![Descripcion del flujo](./assets/descripcion_flujo_practica_3.png)
+
+Enunciados:
+
+- [Práctica 2](./assets/enunciados/[SA]%20Practica%202%20-%201s2024.pdf)
+- [Práctica 3](./assets/enunciados/[SA]%20Practica%203%20-%201s2024.pdf)
 
 ## Arquitectura
 
@@ -235,27 +259,22 @@ Probando API: `http://192.168.49.2:30741/?name=peter`
 
 ## GCP
 
+### Crear un nuevo clúster de Kubernetes
+
+[Ingresar a la sección de Kubernetes](https://console.cloud.google.com/kubernetes) de la consola de Google Cloud, en la sección de _Clústeres de Kubernetes_ crear una nueva consola con los siguientes datos:
+
+- Aspectos básicos del cluster
+  - Nombre: cluster-practicasa
+  - Región: us-central1
+- Configuración avanzada
+  - Metadatos
+    - Descripción: Cluster utilizado para Practicas SA
+- Los demás valores quedan predeterminados.
+
 ### Lanzar proyecto en Kubernetes
 
-1. Crear cluster
-
-Aspectos básicos del cluster
-
-```
-Nombre: cluster-practicasa
-region: us-central1
-```
-
-Configuración avanzada
-
-```
-Descripción: Cluster utilizado para Practicas SA
-```
-
-Todo lo demás queda predeterminado.
-
-2. Subir carpeta de proyecto al editor
-3. En la carpeta de cada microservicio ejecutar lo siguiente:
+1. Subir carpeta de proyecto al editor
+2. En la carpeta de cada microservicio ejecutar lo siguiente:
 
 - Microservicio 1
 

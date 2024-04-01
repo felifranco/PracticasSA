@@ -278,6 +278,56 @@ gitlab-runner unregister --name test-runner
 
 ## Kubernetes Cluster
 
+Para ejecutar los pipelines de GitLab se pueden utilizar los [Kubernetes executor](https://docs.gitlab.com/runner/executors/kubernetes/). Para esta tarea utilizaremos una Instancia de GitLab Runner oficial para ejecutar en Kubernetes, se utilizará [Helm](https://helm.sh/) para hacer la instalación del recurso según la documentación [GitLab Runner Helm Chart](https://docs.gitlab.com/runner/install/kubernetes.html)
+
+### Requisitos
+
+- [Crear un nuevo clúster de Kubernetes](./README.md#crear-un-nuevo-clúster-de-kubernetes) como se detalla en el archivo [README.md](./README.md#crear-un-nuevo-clúster-de-kubernetes)
+- `kubectl` CLI instalado localmente.
+
+### Instalación de GitLab Runner en Kubernetes
+
+#### Versión de Kubernetes
+
+```shell
+$ kubectl version
+WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short.  Use --output=yaml|json to get the full version.
+Client Version: version.Info{Major:"1", Minor:"27", GitVersion:"v1.27.11", GitCommit:"b9e2ad67ad146db566be5a6db140d47e52c8adb2", GitTreeState:"clean", BuildDate:"2024-02-14T10:40:40Z", GoVersion:"go1.21.7", Compiler:"gc", Platform:"linux/amd64"}
+Kustomize Version: v5.0.1
+Server Version: version.Info{Major:"1", Minor:"27", GitVersion:"v1.27.8-gke.1067004", GitCommit:"6f460c12ad45abb234c18ec4f0ea335a1203c415", GitTreeState:"clean", BuildDate:"2024-01-04T22:48:32Z", GoVersion:"go1.20.11 X:boringcrypto", Compiler:"gc", Platform:"linux/amd64"}
+```
+
+#### Instalar Agente
+
+Se utilizará la documentación de GitLab, [Installing the agent for Kubernetes](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html), para la instalación del agente de este proyecto.
+
+##### [Crear un archivo de configuración para un agente](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html#create-an-agent-configuration-file)
+
+Crear el archivo `config.yaml` en la siguiente ubicación:
+
+```
+.gitlab/agents/<agent-name>/config.yaml
+```
+
+A este proyecto se le creó el agente `agente-practicas`.
+
+##### [Registrar el agente con GitLab](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html#create-an-agent-configuration-file)
+
+#### Agregar el Clúster de Kubernetes en GitLab.
+
+En esta ocasión se agregará el Clúster de Kubernetes únicamente a éste proyecto, GitLab permite asociarlo también a grupos o a la cuenta. Para agregarlo se siguen los siguientes pasos:
+
+1. Ingresar al proyecto de GitLab, ubicar la barra lateral izquierda.
+2. Seleccionar **Operate > Kubernetes clusters**
+3. Persionar sobre **[GitLab agent](https://docs.gitlab.com/ee/user/clusters/agent/index.html)**.
+4. Expandir la sección **Runners**.
+5. Seleccionar **New project runner**.
+6. Seleccionar el **Sistema Operativo** donde GitLab Runner está instalado. En nuestro caso será **Linux** puesto que utilizamos una imagen de Docker con ese OS.
+7. En la sección de Tags, en el campo de Tags, ingresar las etiquetas de trabajo para especificarle al runner cuáles puede ejecutar. Si no hay etiquetas de trabajo para el runner entonces seleccionar **Run untagged jobs**.
+8. Opcional. En el campo de **descripción** del Runner, agregar una descripción para el Runner que se mostrará en GitLab.
+9. Opcional. En la sección de **Configuration**, agregarconfiguraciones adicionales.
+10. Seleccionar **Create runner**.
+
 # Notas
 
 ```shell
@@ -290,4 +340,6 @@ git checkout -b feature/fun_14 && git push -u origin feature/fun_14
 
 # Referencias
 
-[GitLab CI/CD - Providing your own docker runners](https://www.youtube.com/watch?v=Y0qT6MCnRG0)
+- [GitLab CI/CD - Providing your own docker runners](https://www.youtube.com/watch?v=Y0qT6MCnRG0)
+- [GitLab CI CD | Install and Configure GitLab Runner on Kubernetes with Helm](https://www.youtube.com/watch?v=0Fes86qtBSc)
+- [Gitlab CI / CD con Google Kubernetes Engine: cómo crear un clúster de GKE y agregarlo a Gitlab](https://www.youtube.com/watch?v=9TaZtZhrykU)
