@@ -37,6 +37,7 @@ runners:
   config: |
     [[runners]]
       [runners.kubernetes]
+        service_account = "gitlab-runner"
         namespace = "gitlab-runners-namespace"
         tls_verify = false
         image = "docker"
