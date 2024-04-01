@@ -45,3 +45,4 @@ deploy_develop:
   needs: [post_build]
   script:
     - echo "Deploy to Kubernetes"
+    - kubectl apply -f hello-world.yaml
