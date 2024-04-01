@@ -365,6 +365,24 @@ helm upgrade --install agente-practicas gitlab/gitlab-agent \
     --set config.kasAddress=wss://kas.gitlab.com
 ```
 
+##### Revisión
+
+Si todo ha transcurrido con normalidad entonces se podría ver el siguiente estado del agente:
+
+###### En GitLab
+
+![Agente conectado](./assets/agent-connected.png)
+
+###### En el clúster
+
+```shell
+$ kubectl get namespaces
+NAME                            STATUS   AGE
+default                         Active   96m
+gitlab-agent-agente-practicas   Active   12m
+...
+```
+
 # Notas
 
 ```shell
