@@ -42,6 +42,7 @@ post_build:
 
 deploy_develop:
   stage: deploy
+  image: bitnami/kubectl
   needs: [post_build]
   script:
     - ls -l
