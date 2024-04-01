@@ -328,6 +328,42 @@ En esta ocasión se agregará el Clúster de Kubernetes únicamente a éste proy
 3. Persionar sobre **Connect a cluster**.
 4. Expandir el listado **Select an agent or enter a name to create new**, ahí debería de aparecer el agente creado en la sección [Crear un archivo de configuración para un agente](#crear-un-archivo-de-configuración-para-un-agente)
 5. Presionar en **Register**.
+6. Guardar el Script que se genera al Registrar el agente.
+
+##### [Instalar el agente en el clúster](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html#install-the-agent-in-the-cluster)
+
+Se utilizará **Helm** para hacer la [instalación del agente](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html#install-the-agent-with-helm) en el cluster. El clúster provisto por Google Cloud ya tiene una versión instalada por lo que se utilizará esa para continuar:
+
+```shell
+$ helm version
+version.BuildInfo{Version:"v3.9.3", GitCommit:"414ff28d4029ae8c8b05d62aa06c7fe3dee2bc58", GitTreeState:"clean", GoVersion:"go1.17.13"}
+```
+
+Utilizar el script que se generó en el `paso 6` de [Registrar el agente con GitLab](#registrar-el-agente-con-gitlab). El script tiene un formato como el siguiente:
+
+```shell
+helm repo add gitlab https://charts.gitlab.io
+helm repo update
+helm upgrade --install test gitlab/gitlab-agent \
+    --namespace gitlab-agent-test \
+    --create-namespace \
+    --set image.tag=<current agentk version> \
+    --set config.token=<your_token> \
+    --set config.kasAddress=<address_to_GitLab_KAS_instance>
+```
+
+Script generado para este proyecto:
+
+```shell
+helm repo add gitlab https://charts.gitlab.io
+helm repo update
+helm upgrade --install agente-practicas gitlab/gitlab-agent \
+    --namespace gitlab-agent-agente-practicas \
+    --create-namespace \
+    --set image.tag=v16.11.0-rc2 \
+    --set config.token=<TOKEN> \
+    --set config.kasAddress=wss://kas.gitlab.com
+```
 
 # Notas
 
