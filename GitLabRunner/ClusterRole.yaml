@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: gitlab-runner
+  namespace: gitlab-runners-namespace
+rules:
+  - apiGroups: ["", "extensions", "apps"]
+    resources: ["services", "deployments", "replicasets", "pods", "configmap"]
+    verbs: ["get", "list", "create", "watch", "delete", "update"]

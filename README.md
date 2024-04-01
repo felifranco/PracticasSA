@@ -240,6 +240,19 @@ En este caso se tiene instalado Docker en el equipo host por lo que es necesario
 minikube start --driver=docker
 ```
 
+### Versión de `kubectl`
+
+No estoy seguro si esta versión se instaló con Minikube, pero esta se encuentra antes de instalar la versión de GCP
+
+```shell
+$ kubectl version
+WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short.  Use --output=yaml|json to get the full version.
+Client Version: version.Info{Major:"1", Minor:"26+", GitVersion:"v1.26.14-dispatcher", GitCommit:"929bbaf1bd77b0524b42b8d1ffb1d8410532b904", GitTreeState:"clean", BuildDate:"2024-03-11T22:19:02Z", GoVersion:"go1.21.7", Compiler:"gc", Platform:"linux/amd64"}
+Kustomize Version: v4.5.7
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+
+```
+
 ### Desplegar servicios
 
 #### MICROSERVICIO 1
@@ -263,9 +276,9 @@ Probando API: `http://192.168.49.2:30741/?name=peter`
 
 [Ingresar a la sección de Kubernetes](https://console.cloud.google.com/kubernetes) de la consola de Google Cloud, en la sección de _Clústeres de Kubernetes_ crear una nueva consola con los siguientes datos:
 
-- Aspectos básicos del cluster
+- Aspectos básicos del `cluster estándard`
   - Nombre: cluster-practicasa
-  - Región: us-central1
+  - Zona: us-central1-a
 - Configuración avanzada
   - Metadatos
     - Descripción: Cluster utilizado para Practicas SA
@@ -305,13 +318,13 @@ kubectl get service
 
 ### Conectar a GCP a través de la terminal
 
-https://cloud.google.com/sdk/docs/install?hl=es-419#rpm
+Estas instrucciones son para instalar Google Cloud CLI, gcloud.
 
-#### Contenido del paquete
+#### [Acerca de `gcloud`](https://cloud.google.com/sdk/docs/install?hl=es-419#rpm)
 
 La CLI de gcloud está disponible en formato de paquete para instalarla en sistemas Red Hat Enterprise Linux 7, 8 y 9; Fedora 33 y 34; y CentOS 7 y 8. Este paquete solo contiene los comandos gcloud, gcloud alpha, gcloud beta, gsutil y bq. No incluye kubectl ni las extensiones de App Engine necesarias para implementar una aplicación mediante comandos de gcloud, los que se pueden instalar por separado como se describe más adelante en esta sección.
 
-#### Instalación
+#### Instalación Google Cloud CLI
 
 1. Actualiza el DNF con la información del repositorio de gcloud CLI. El siguiente comando de muestra es para una instalación compatible con Red Hat Enterprise Linux 9, pero asegúrate de actualizar la configuración según sea necesario para tu configuración:
 
@@ -386,19 +399,67 @@ Cambia a una versión inferior de la gcloud CLI
 
 Si deseas volver a una versión específica de gcloud CLI, en la que VERSION tiene el formato 123.0.0, ejecuta: sudo dnf downgrade google-cloud-cli-VERSION Las diez actualizaciones más recientes siempre estarán disponibles en el repositorio. NOTA: Para las versiones anteriores a la 371.0.0, el nombre del paquete es google-cloud-sdk.
 
-#### Kubernetes desde GCP
+#### [Instala kubectl y configura el acceso al clúster](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl?hl=es-419#install_plugin)
 
-https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl?hl=es-419#install_plugin
+Se explica cómo instalar y configurar la herramienta de línea de comandos de `kubectl` para interactuar con tus clústeres de Google Kubernetes Engine (GKE).
 
+##### Antes de comenzar
+
+Antes de comenzar hay que asegurarse de haber habilitado la API de Google Kubernetes Engine, si no se puede realizar [aquí](https://console.cloud.google.com/flows/enableapi?apiid=container.googleapis.com&hl=es-419&_ga=2.70947920.1195780417.1711949612-1300850861.1708728292&_gac=1.79931109.1709659910.CjwKCAiAopuvBhBCEiwAm8jaMRrhUHf1UbhhIzO0Gmxfl4p0GhoIdDCe0XbBsMn62cTOrjyH8oLcrxoClckQAvD_BwE).
+
+##### [Instalar componente `kubectl`](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl?hl=es-419#install_kubectl)
+
+```shell
+gcloud components install kubectl
 ```
-gcloud components install gke-gcloud-auth-plugin
 
-sudo yum install google-cloud-sdk-gke-gcloud-auth-plugin
+Luego de ejecutar el comando anterior salió el error siguiente:
+
+```shell
+ERROR: (gcloud.components.install)
+You cannot perform this action because the Google Cloud CLI component manager
+is disabled for this installation. You can run the following command
+to achieve the same result for this installation:
+
+sudo yum install kubectl
 ```
 
+Por lo que se instaló desde la paquetería oficial del sistema operativo:
+
+```shell
+sudo dnf install kubectl
 ```
+
+##### [Instalar los complementos obligatorios](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl?hl=es-419#install_plugin)
+
+Antes de comenzar, verifica si el complemento ya está instalado:
+
+```shell
 gke-gcloud-auth-plugin --version
 ```
+
+Si no está instalado ejecutar:
+
+```shell
+gcloud components install gke-gcloud-auth-plugin
+```
+
+o en su lugar
+
+```shell
+sudo dnf install google-cloud-sdk-gke-gcloud-auth-plugin
+```
+
+##### Configuración de `kubectl`
+
+Actualizar la configuración de `kubectl` para usar el complemento:
+
+```shell
+gcloud container clusters get-credentials CLUSTER_NAME \
+    --region=COMPUTE_REGION
+```
+
+Los valores de `CLUSTER_NAME` y `COMPUTE_REGION` se pueden obtener en [Google Cloud Console](https://console.cloud.google.com/kubernetes/list).
 
 ## CI/CD
 

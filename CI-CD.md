@@ -351,6 +351,129 @@ helm upgrade --install agente-practicas gitlab/gitlab-agent \
     --set config.kasAddress=wss://kas.gitlab.com
 ```
 
+##### Instalar Gitlab Runner en el clúster
+
+Para instalar GitLab Runner en el clúster utilizando Helm Chart se necesitan cumplir los siguientes prerrequisitos. Estos aplican para la instalación que estamos llevando a cabo, otras instalaciones podrían necesitar más o menos cosas:
+
+- Your GitLab server’s API is reachable from the cluster.
+- Kubernetes 1.4+ with Beta APIs enabled.
+- [`kubectl CLI` instalado localmente y autenticado al clúster](README.md#instalar-componente-kubectl)
+- [Instalación del Cliente Helm](https://helm.sh/docs/intro/install/) localmente.
+
+###### [Crear archivo de configuración para el GitLab Runner](https://docs.gitlab.com/runner/install/kubernetes.html#configuring-gitlab-runner-using-the-helm-chart)
+
+Crear el archivo [`values.yaml`](./GitLabRunner/values.yaml). La configuración predeterminada para el archivo se encuentra en el [respositorio](https://gitlab.com/gitlab-org/charts/gitlab-runner/blob/main/values.yaml). De la configuración predeterminada del archivo anterior Y la configuración requerida, la versión final del archivo queda algo similar a:
+
+```shell
+gitlabUrl: https://gitlab.com/
+
+runnerToken: "<TOKEN>"
+
+concurrent: 10
+
+checkInterval: 30
+
+rbac:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["list", "get", "watch", "create", "delete"]
+    - apiGroups: [""]
+      resources: ["pods/exec"]
+      verbs: ["create"]
+    - apiGroups: [""]
+      resources: ["pods/log"]
+      verbs: ["get"]
+    - apiGroups: [""]
+      resources: ["pods/attach"]
+      verbs: ["list", "get", "create", "delete", "update"]
+    - apiGroups: [""]
+      resources: ["secrets"]
+      verbs: ["list", "get", "create", "delete", "update"]
+    - apiGroups: [""]
+      resources: ["configmaps"]
+      verbs: ["list", "get", "create", "delete", "update"]
+
+runners:
+  privileged: true
+
+  config: |
+    [[runners]]
+      [runners.kubernetes]
+        namespace = "gitlab-runners-namespace"
+        tls_verify = false
+        image = "docker"
+        privileged = true
+        [[runners.kubernetes.volumes.host_path]]
+          name = "docker"
+          mount_path = "/var/run/docker.sock"
+
+```
+
+los demás valores ya vienen definidos en la configuración predeterminada del respotorio anterior.
+
+###### [Instalación utilizando Helm](https://docs.gitlab.com/runner/install/kubernetes.html#installing-gitlab-runner-using-the-helm-chart)
+
+Agregar el repositorio GitLab de Helm:
+
+```shell
+helm repo add gitlab https://charts.gitlab.io
+```
+
+Si se desea tener la última versión del GitLab Runner entonces se debe de actualizar el paquete de Helm.
+
+```shell
+helm repo update gitlab
+```
+
+Para ver el listado de versiones de GitLab Runner disponibles, correr:
+
+```shell
+helm search repo -l gitlab/gitlab-runner
+```
+
+Ver la versión de Helm instalada
+
+```shell
+$ helm version
+version.BuildInfo{Version:"v3.11", GitCommit:"", GitTreeState:"", GoVersion:"go1.21rc3"}
+```
+
+Como es la versión 3 entonces se creará un GitLab Runner de la siguiente manera
+
+```shell
+helm install --namespace <NAMESPACE> gitlab-runner -f <CONFIG_VALUES_FILE> gitlab/gitlab-runner
+```
+
+Creamos un nuevo namespace en el clúster para albergar los Runners
+
+```shell
+kubectl create namespace gitlab-runners-namespace
+```
+
+En la terminal nos posicionamos en la carpeta donde se encuentra el archivo de configuración elaborado en [Crear archivo de configuración para el GitLab Runner](#crear-archivo-de-configuración-para-el-gitlab-runner). Para este proyecto es en `./GitLabRunner`
+
+Ya dentro de la carpeta, creado el archivo y el namespace dentro del clúster entonces ejecutamos:
+
+```shell
+helm install --namespace gitlab-runners-namespace gitlab-runner -f values.yaml gitlab/gitlab-runner
+```
+
+Se se desea hacer una [actualización a las configuraciones del Runner](https://docs.gitlab.com/runner/install/kubernetes.html#upgrading-gitlab-runner-using-the-helm-chart) se puede cambiar el archivo `values.yaml` y cargarlo nuevamento con el siguiente comando:
+
+```shell
+helm upgrade --namespace gitlab-runners-namespace -f values.yaml gitlab-runner gitlab/gitlab-runner
+```
+
+Desinstalar Runner
+
+```shell
+helm uninstall --namespace gitlab-runners-namespace gitlab-runner
+```
+
+**NOTA**: Cuando había un cambio de configuración en el `values.yaml`, salía más facil eliminar e instalar el Runner, `upgrade` también funcionaba pero yo prefería hacerlo eliminando/instalando.
+
 ##### Revisión
 
 Si todo ha transcurrido con normalidad entonces se podría ver el siguiente estado del agente:
@@ -370,10 +493,16 @@ gitlab-agent-agente-practicas   Active   12m
 ```
 
 ```shell
-$ kubectl get pods -n gitlab-agent-agente-practicas
-NAME                                                READY   STATUS    RESTARTS   AGE
-agente-practicas-gitlab-agent-v2-56f7467558-qsnv5   1/1     Running   0          144m
-agente-practicas-gitlab-agent-v2-56f7467558-rf8px   1/1     Running   0          144m
+$ kubectl get all -n gitlab-agent-agente-practicas
+NAME                                                    READY   STATUS    RESTARTS   AGE
+pod/agente-practicas-gitlab-agent-v2-56f7467558-qsnv5   1/1     Running   0          172m
+pod/agente-practicas-gitlab-agent-v2-56f7467558-rf8px   1/1     Running   0          172m
+
+NAME                                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/agente-practicas-gitlab-agent-v2   2/2     2            2           172m
+
+NAME                                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/agente-practicas-gitlab-agent-v2-56f7467558   2         2         2       172m       144m
 ```
 
 # Notas
@@ -386,6 +515,18 @@ npm install -D jest supertest
 git checkout -b feature/fun_14 && git push -u origin feature/fun_14
 ```
 
+```shell
+kubectl get pods --namespace gitlab-runners-namespace
+```
+
+```shell
+kubectl describe node
+```
+
+```shell
+
+```
+
 # Referencias
 
 - [GitLab CI/CD - Providing your own docker runners](https://www.youtube.com/watch?v=Y0qT6MCnRG0)
@@ -396,3 +537,6 @@ git checkout -b feature/fun_14 && git push -u origin feature/fun_14
 - [CI/CD YAML syntax reference - stages](https://docs.gitlab.com/ee/ci/yaml/index.html#stages)
 - [GitLab CI/CD variables](https://docs.gitlab.com/ee/ci/variables/)
 - [Predefined CI/CD variables reference](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)
+- [](https://cylab.be/blog/112/continuous-deployment-with-gitlab-and-kubernetes)
+- [](https://www.linkedin.com/pulse/gitlab-ci-runner-kubernetes-cluster-zeyneb-sdiri/)
+- [](https://8grams.medium.com/how-to-setup-gitlab-runner-on-kubernetes-cluster-e4caf688ca89)

@@ -1,0 +1,43 @@
+gitlabUrl: https://gitlab.com/
+
+runnerToken: "TOKEN"
+
+concurrent: 10
+
+checkInterval: 30
+
+rbac:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["list", "get", "watch", "create", "delete"]
+    - apiGroups: [""]
+      resources: ["pods/exec"]
+      verbs: ["create"]
+    - apiGroups: [""]
+      resources: ["pods/log"]
+      verbs: ["get"]
+    - apiGroups: [""]
+      resources: ["pods/attach"]
+      verbs: ["list", "get", "create", "delete", "update"]
+    - apiGroups: [""]
+      resources: ["secrets"]
+      verbs: ["list", "get", "create", "delete", "update"]
+    - apiGroups: [""]
+      resources: ["configmaps"]
+      verbs: ["list", "get", "create", "delete", "update"]
+
+runners:
+  privileged: true
+
+  config: |
+    [[runners]]
+      [runners.kubernetes]
+        namespace = "gitlab-runners-namespace"
+        tls_verify = false
+        image = "docker"
+        privileged = true
+        [[runners.kubernetes.volumes.host_path]]
+          name = "docker"
+          mount_path = "/var/run/docker.sock"
