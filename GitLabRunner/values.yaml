@@ -27,6 +27,9 @@ rbac:
     - apiGroups: [""]
       resources: ["configmaps"]
       verbs: ["list", "get", "create", "delete", "update"]
+    - apiGroups: ["", "extensions", "apps"]
+      resources: ["services", "deployments", "replicasets"]
+      verbs: ["get", "list", "create", "watch", "delete", "update"]
 
 runners:
   privileged: true
