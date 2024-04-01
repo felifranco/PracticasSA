@@ -165,6 +165,10 @@ PORT=3011
 
 TODO: Generar el contenido
 
+```shell
+npm install -D jest supertest
+```
+
 ### Contrato de microservicios
 
 TODO: Generar el contenido

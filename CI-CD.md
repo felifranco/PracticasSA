@@ -9,7 +9,20 @@
   - [Crear un contenedor con GitLab Runner](#crear-un-contenedor-con-gitlab-runner)
   - [Registrar el Runner](#registrar-el-runner)
   - [Eliminar registro del Runner](#eliminar-registro-del-runner)
-- [Kubernetes Cluster](#kubernetes-cluster)
+- [GitLab con Kubernetes](#gitlab-con-kubernetes)
+  - [Requisitos](#requisitos)
+  - [Instalación de GitLab Runner en Kubernetes](#instalación-de-gitlab-runner-en-kubernetes)
+    - [Versión de `kubectl`](#versión-de-kubectl)
+    - [Instalar Agente](#instalar-agente)
+      - [Crear un archivo de configuración para un agente](#crear-un-archivo-de-configuración-para-un-agente)
+      - [Registrar el agente con GitLab](#registrar-el-agente-con-gitlab)
+      - [Instalar el agente en el clúster](#instalar-el-agente-en-el-clúster)
+      - [Instalar Gitlab Runner en el clúster](#instalar-gitlab-runner-en-el-clúster)
+        - [Crear archivo de configuración para el GitLab Runner](#crear-archivo-de-configuración-para-el-gitlab-runner)
+        - [Instalación utilizando Helm](#instalación-utilizando-helm)
+      - [Revisión](#revisión)
+        - [En GitLab](#en-gitlab)
+        - [En el clúster](#en-el-clúster)
 - [Notas](#notas)
 - [Referencias](#referencias)
 
@@ -300,7 +313,7 @@ El contenido del archivo para que se [autorice al agente el acceso al proyecto](
 ```yaml
 ci_access:
   projects:
-    - id: path/to/project
+    - id: cursos_usac/practicassa
 ```
 
 A este proyecto se le creó el agente `agente-practicas`.
@@ -411,6 +424,8 @@ runners:
 
 ```
 
+**Consideraciones**: [Prevent host kernel exposure](https://docs.gitlab.com/runner/executors/kubernetes/#prevent-host-kernel-exposure) menciona la exposición que se tiene por utilizar `mount_path = "/var/run/docker.sock"`
+
 los demás valores ya vienen definidos en la configuración predeterminada del respotorio anterior.
 
 ###### [Instalación utilizando Helm](https://docs.gitlab.com/runner/install/kubernetes.html#installing-gitlab-runner-using-the-helm-chart)
@@ -508,10 +523,6 @@ replicaset.apps/agente-practicas-gitlab-agent-v2-56f7467558   2         2       
 # Notas
 
 ```shell
-npm install -D jest supertest
-```
-
-```shell
 git checkout -b feature/fun_14 && git push -u origin feature/fun_14
 ```
 
@@ -520,7 +531,7 @@ kubectl get pods --namespace gitlab-runners-namespace
 ```
 
 ```shell
-kubectl describe node
+
 ```
 
 ```shell
@@ -537,6 +548,6 @@ kubectl describe node
 - [CI/CD YAML syntax reference - stages](https://docs.gitlab.com/ee/ci/yaml/index.html#stages)
 - [GitLab CI/CD variables](https://docs.gitlab.com/ee/ci/variables/)
 - [Predefined CI/CD variables reference](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)
-- [](https://cylab.be/blog/112/continuous-deployment-with-gitlab-and-kubernetes)
-- [](https://www.linkedin.com/pulse/gitlab-ci-runner-kubernetes-cluster-zeyneb-sdiri/)
-- [](https://8grams.medium.com/how-to-setup-gitlab-runner-on-kubernetes-cluster-e4caf688ca89)
+- [Continuous Deployment with GitLab and Kubernetes](https://cylab.be/blog/112/continuous-deployment-with-gitlab-and-kubernetes)
+- [Gitlab CI runner on Kubernetes cluster](https://www.linkedin.com/pulse/gitlab-ci-runner-kubernetes-cluster-zeyneb-sdiri/)
+- [How to setup GitLab Runner on Kubernetes Cluster](https://8grams.medium.com/how-to-setup-gitlab-runner-on-kubernetes-cluster-e4caf688ca89)
