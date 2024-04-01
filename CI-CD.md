@@ -17,9 +17,9 @@
       - [Crear un archivo de configuración para un agente](#crear-un-archivo-de-configuración-para-un-agente)
       - [Registrar el agente con GitLab](#registrar-el-agente-con-gitlab)
       - [Instalar el agente en el clúster](#instalar-el-agente-en-el-clúster)
-      - [Instalar Gitlab Runner en el clúster](#instalar-gitlab-runner-en-el-clúster)
-        - [Crear archivo de configuración para el GitLab Runner](#crear-archivo-de-configuración-para-el-gitlab-runner)
-        - [Instalación utilizando Helm](#instalación-utilizando-helm)
+    - [Instalar Gitlab Runner en el clúster](#instalar-gitlab-runner-en-el-clúster)
+      - [Crear archivo de configuración para el GitLab Runner](#crear-archivo-de-configuración-para-el-gitlab-runner)
+      - [Instalación utilizando Helm](#instalación-utilizando-helm)
       - [Revisión](#revisión)
         - [En GitLab](#en-gitlab)
         - [En el clúster](#en-el-clúster)
@@ -364,7 +364,7 @@ helm upgrade --install agente-practicas gitlab/gitlab-agent \
     --set config.kasAddress=wss://kas.gitlab.com
 ```
 
-##### Instalar Gitlab Runner en el clúster
+#### Instalar Gitlab Runner en el clúster
 
 Para instalar GitLab Runner en el clúster utilizando Helm Chart se necesitan cumplir los siguientes prerrequisitos. Estos aplican para la instalación que estamos llevando a cabo, otras instalaciones podrían necesitar más o menos cosas:
 
@@ -373,7 +373,7 @@ Para instalar GitLab Runner en el clúster utilizando Helm Chart se necesitan cu
 - [`kubectl CLI` instalado localmente y autenticado al clúster](README.md#instalar-componente-kubectl)
 - [Instalación del Cliente Helm](https://helm.sh/docs/intro/install/) localmente.
 
-###### [Crear archivo de configuración para el GitLab Runner](https://docs.gitlab.com/runner/install/kubernetes.html#configuring-gitlab-runner-using-the-helm-chart)
+##### [Crear archivo de configuración para el GitLab Runner](https://docs.gitlab.com/runner/install/kubernetes.html#configuring-gitlab-runner-using-the-helm-chart)
 
 Crear el archivo [`values.yaml`](./GitLabRunner/values.yaml). La configuración predeterminada para el archivo se encuentra en el [respositorio](https://gitlab.com/gitlab-org/charts/gitlab-runner/blob/main/values.yaml). De la configuración predeterminada del archivo anterior Y la configuración requerida, la versión final del archivo queda algo similar a:
 
@@ -428,7 +428,7 @@ runners:
 
 los demás valores ya vienen definidos en la configuración predeterminada del respotorio anterior.
 
-###### [Instalación utilizando Helm](https://docs.gitlab.com/runner/install/kubernetes.html#installing-gitlab-runner-using-the-helm-chart)
+##### [Instalación utilizando Helm](https://docs.gitlab.com/runner/install/kubernetes.html#installing-gitlab-runner-using-the-helm-chart)
 
 Agregar el repositorio GitLab de Helm:
 

@@ -4,10 +4,11 @@
 
 - [Acerca del proyecto](#acerca-del-proyecto)
   - [Práctica 2](#práctica-2)
-    - [Diagrama de arquitectura a implementar](#diagrama-de-arquitectura-a-implementar-en-la-práctica-2)
+    - [Diagrama de arquitectura a implementar en la práctica 2](#diagrama-de-arquitectura-a-implementar-en-la-práctica-2)
   - [Práctica 3](#práctica-3)
-    - [Diagrama de arquitectura a implementar](#diagrama-de-arquitectura-a-implementar-en-la-práctica-3)
+    - [Diagrama de arquitectura a implementar en la práctica 3](#diagrama-de-arquitectura-a-implementar-en-la-práctica-3)
     - [Descripción del flujo](#descripción-del-flujo)
+  - [Enunciados](#enunciados)
 - [Arquitectura](#arquitectura)
   - [Diagrama](#diagrama)
   - [Tecnología utilizada](#tectología-utilizada)
@@ -20,16 +21,22 @@
 - [Minikube](#minikube)
   - [Instalación de Minikube](#instalación-de-minikube)
   - [Iniciar Minikube](#iniciar-minikube)
+  - [Versión de `kubectl`](#versión-de-kubectl)
   - [Desplegar servicios](#desplegar-servicios)
-    - [Microservicio Agify]()
-    - [Microservicio Genderize]()
-    - [Middleware]()
+    - [Microservicio Agify](#microservicio-agify)
+    - [Microservicio Genderize](#microservicio-genderize)
+    - [Middleware](#middleware)
 - [GCP](#gcp)
+  - [Crear un nuevo clúster de Kubernetes](#crear-un-nuevo-clúster-de-kubernetes)
   - [Lanzar proyecto en Kubernetes](#lanzar-proyecto-en-kubernetes)
   - [Conectar a GCP a través de la terminal](#conectar-a-gcp-a-través-de-la-terminal)
-    - [Contenido del paquete](#contenido-del-paquete)
-    - [Instalación](#instalación)
-    - [Kubernetes desde GCP](#kubernetes-desde-gcp)
+    - [Acerca de `gcloud`](#acerca-de-gcloud)
+    - [Instalación Google Cloud CLI](#instalación-google-cloud-cli)
+    - [Instala kubectl y configura el acceso al clúster](#instala-kubectl-y-configura-el-acceso-al-clúster)
+      - [Antes de comenzar](#antes-de-comenzar)
+      - [Instalar componente `kubectl`](#instalar-componente-kubectl)
+      - [Instalar los complementos obligatorios](#instalar-los-complementos-obligatorios)
+      - [Configuración de `kubectl`](#configuración-de-kubectl)
 - [CI/CD](#cicd)
 
 ## Acerca del proyecto
@@ -50,7 +57,7 @@
 
 ![Descripcion del flujo](./assets/descripcion_flujo_practica_3.png)
 
-Enunciados:
+### Enunciados
 
 - [Práctica 2](./assets/enunciados/[SA]%20Practica%202%20-%201s2024.pdf)
 - [Práctica 3](./assets/enunciados/[SA]%20Practica%203%20-%201s2024.pdf)
@@ -254,12 +261,11 @@ WARNING: This version information is deprecated and will be replaced with the ou
 Client Version: version.Info{Major:"1", Minor:"26+", GitVersion:"v1.26.14-dispatcher", GitCommit:"929bbaf1bd77b0524b42b8d1ffb1d8410532b904", GitTreeState:"clean", BuildDate:"2024-03-11T22:19:02Z", GoVersion:"go1.21.7", Compiler:"gc", Platform:"linux/amd64"}
 Kustomize Version: v4.5.7
 The connection to the server localhost:8080 was refused - did you specify the right host or port?
-
 ```
 
 ### Desplegar servicios
 
-#### MICROSERVICIO 1
+#### Microservicio Agify
 
 ```shell
 $ kubectl apply -f micro1-deployment.yaml
