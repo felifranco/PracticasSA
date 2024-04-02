@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: micro-genderize
-          image: f64franco/micro-genderize:practica2
+          image: $IMAGE_TO_DEPLOY
           ports:
             - containerPort: 3000
           env:
