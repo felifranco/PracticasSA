@@ -51,5 +51,5 @@ deploy_develop:
     #- export IMAGE_TO_DEPLOY=$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME
     #- envsubst < deployment.yaml | kubectl apply --namespace $NAMESPACE -f -
     #- kubectl apply --namespace $NAMESPACE -f service.yaml
-    - kubectl apply apply --namespace $NAMESPACE -f develop-deployment.yaml
+    - kubectl apply --namespace $NAMESPACE -f develop-deployment.yaml
     - echo "Deploy to Kubernetes =)"
