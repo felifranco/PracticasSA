@@ -1,0 +1,30 @@
+stages:
+  - version
+  - delivery
+
+image: docker:cli
+services:
+  - docker:dind
+
+generate:
+  stage: version
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    #- echo "GitLab CI/CD | Print all environment variables"
+    #- env
+    - cd "$MICRO_PATH"
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG" --file server.Dockerfile .
+    - docker push "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG"
+
+images:
+  stage: delivery
+  needs: [generate]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG"
+    - docker tag "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG" "$DOCKER_IMAGE_NAME:$CI_COMMIT_REF_SLUG"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - docker push "$DOCKER_IMAGE_NAME:$CI_COMMIT_REF_SLUG"
+    - docker rmi "$CI_REGISTRY_IMAGE/$MICRO_PATH:$CI_COMMIT_REF_SLUG" "$DOCKER_IMAGE_NAME:$CI_COMMIT_REF_SLUG"

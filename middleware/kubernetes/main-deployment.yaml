@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: middleware
-          image: f64franco/middleware:practica2
+          image: f64franco/middleware:main
           ports:
             - containerPort: 3000
           env:
@@ -24,7 +24,7 @@ spec:
               value: "0.0.0.0"
             - name: PORT
               value: "3000"
-            - name: MICRO1_URL
-              value: "http://micro1-service"
-            - name: MICRO2_URL
-              value: "http://micro2-service"
+            - name: MICRO_AGIFY
+              value: "http://micro-agify"
+            - name: MICRO_GENDERIZE
+              value: "http://micro-genderize"

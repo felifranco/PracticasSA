@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: middleware-deployment
+  labels:
+    app: middleware
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: middleware
+  template:
+    metadata:
+      labels:
+        app: middleware
+    spec:
+      containers:
+        - name: middleware
+          image: f64franco/middleware:develop
+          ports:
+            - containerPort: 3000
+          env:
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "3000"
+            - name: MICRO_AGIFY
+              value: "http://micro-agify"
+            - name: MICRO_GENDERIZE
+              value: "http://micro-genderize"

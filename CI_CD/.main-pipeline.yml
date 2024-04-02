@@ -1,9 +1,8 @@
 stages:
   - build
   - test
-  - post-build
-  - deploy
   - delivery
+  - deploy
 
 image: docker:cli
 services:
@@ -29,8 +28,8 @@ test_main:
     - docker compose up --exit-code-from testing
     - docker compose down --rmi all -v --remove-orphans
 
-deploy_main:
-  stage: deploy
+delivery_main:
+  stage: delivery
   needs: [test_main]
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
@@ -41,3 +40,13 @@ deploy_main:
     - docker push "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
     - docker rmi "$CI_REGISTRY_IMAGE/$MICRO_PATH:$MAIN_BRANCH_NAME" "$DOCKER_IMAGE_NAME:$MAIN_BRANCH_NAME"
   environment: production
+
+deploy_main:
+  stage: deploy
+  image: bitnami/kubectl
+  needs: [delivery_main]
+  script:
+    - cd "$KUBERNETES_FILES"
+    - kubectl apply --namespace $NAMESPACE -f main-deployment.yaml
+    - kubectl apply --namespace $NAMESPACE -f service.yaml
+    - echo "Deployed to namespace $NAMESPACE =)"
