@@ -47,7 +47,7 @@ deploy_develop:
   script:
     - cd "$KUBERNETES_FILES"
     - ls -l
-    - apt-get install gettext-base
+    - sudo apt-get install gettext-base
     - export IMAGE_TO_DEPLOY=$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME
     - envsubst < deployment.yaml | kubectl apply --namespace $NAMESPACE -f -
     - kubectl apply --namespace $NAMESPACE -f service.yaml
