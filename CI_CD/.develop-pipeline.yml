@@ -42,12 +42,12 @@ post_build:
 
 deploy_develop:
   stage: deploy
-  image: bitnami/kubectl
+  image: bitnami/kubectl:1.26.15-debian-12-r1
   needs: [post_build]
   script:
     - cd "$KUBERNETES_FILES"
     - ls -l
-    - apk add gettext
+    - apt-get install gettext-base
     - export IMAGE_TO_DEPLOY=$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME
     - envsubst < deployment.yaml | kubectl apply --namespace $NAMESPACE -f -
     - kubectl apply --namespace $NAMESPACE -f service.yaml
