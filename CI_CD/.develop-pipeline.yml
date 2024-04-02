@@ -42,7 +42,7 @@ post_build:
 
 deploy_develop:
   stage: deploy
-  image: bitnami/kubectl:1.26.15-debian-12-r1
+  image: bitnami/kubectl
   needs: [post_build]
   script:
     - cd "$KUBERNETES_FILES"
