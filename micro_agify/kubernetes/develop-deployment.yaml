@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: micro-agify
-          image: f64franco/micro-agify:practica2
+          image: f64franco/micro-agify:develop
           ports:
             - containerPort: 3000
           env:

@@ -2,6 +2,7 @@ stages:
   - integration
   - merge_request
   - feature
+  - release
 
 .print_vars:
   stage: integration
@@ -41,6 +42,21 @@ micro_agify_main:
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
       changes:
         - $MICRO_PATH/**/*
+
+micro_agify_release:
+  stage: release
+  variables:
+    MICRO_PATH: "micro_agify"
+    DOCKER_IMAGE_NAME: "f64franco/micro-agify"
+  trigger:
+    include: CI_CD/.release-pipeline.yml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_BRANCH =~ /^(?i)(release)(.*)/
+      changes:
+        - $MICRO_PATH/**/*
+    - when: never
 
 micro_agify_feature:
   stage: feature
@@ -103,6 +119,21 @@ micro_genderize_main:
       changes:
         - $MICRO_PATH/**/*
 
+micro_genderize_release:
+  stage: release
+  variables:
+    MICRO_PATH: "micro_genderize"
+    DOCKER_IMAGE_NAME: "f64franco/micro-genderize"
+  trigger:
+    include: CI_CD/.release-pipeline.yml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_BRANCH =~ /^(?i)(release)(.*)/
+      changes:
+        - $MICRO_PATH/**/*
+    - when: never
+
 micro_genderize_feature:
   stage: feature
   variables:
@@ -163,6 +194,21 @@ micro_middleware_main:
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
       changes:
         - $MICRO_PATH/**/*
+
+micro_middleware_release:
+  stage: release
+  variables:
+    MICRO_PATH: "middleware"
+    DOCKER_IMAGE_NAME: "f64franco/middleware"
+  trigger:
+    include: CI_CD/.release-pipeline.yml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_BRANCH =~ /^(?i)(release)(.*)/
+      changes:
+        - $MICRO_PATH/**/*
+    - when: never
 
 micro_middleware_feature:
   stage: feature
