@@ -45,10 +45,8 @@ deploy_develop:
   image: bitnami/kubectl
   needs: [post_build]
   script:
-    - echo "KUBERNETES_FILES -> $KUBERNETES_FILES"
-    - echo "NAMESPACE -> $NAMESPACE"
-    - ls -l
-    - echo "Deploy to Kubernetes"
-    - cd GitLabRunner
-    - cat hello-world.yaml
-    - kubectl apply -f hello-world.yaml --namespace $NAMESPACE
+    - cd "$KUBERNETES_FILES"
+    - export IMAGE_TO_DEPLOY=$DOCKER_IMAGE_NAME:$DEVELOP_BRANCH_NAME
+    - envsubst < deployment.yaml | kubectl apply --namespace $NAMESPACE -f -
+    - kubectl apply --namespace $NAMESPACE -f service.yaml
+    - echo "Deploy to Kubernetes =)"

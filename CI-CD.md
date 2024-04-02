@@ -380,7 +380,7 @@ Crear el archivo [`values.yaml`](./GitLabRunner/values.yaml). La configuración 
 ```shell
 gitlabUrl: https://gitlab.com/
 
-runnerToken: "<TOKEN>"
+runnerToken: "TOKEN"
 
 concurrent: 10
 
@@ -407,6 +407,9 @@ rbac:
     - apiGroups: [""]
       resources: ["configmaps"]
       verbs: ["list", "get", "create", "delete", "update"]
+    - apiGroups: ["", "extensions", "apps"]
+      resources: ["services", "deployments", "replicasets"]
+      verbs: ["get", "list", "create", "watch", "delete", "update"]
 
 runners:
   privileged: true
@@ -414,6 +417,7 @@ runners:
   config: |
     [[runners]]
       [runners.kubernetes]
+        service_account = "gitlab-runner"
         namespace = "gitlab-runners-namespace"
         tls_verify = false
         image = "docker"
@@ -421,7 +425,6 @@ runners:
         [[runners.kubernetes.volumes.host_path]]
           name = "docker"
           mount_path = "/var/run/docker.sock"
-
 ```
 
 **Consideraciones**: [Prevent host kernel exposure](https://docs.gitlab.com/runner/executors/kubernetes/#prevent-host-kernel-exposure) menciona la exposición que se tiene por utilizar `mount_path = "/var/run/docker.sock"`
@@ -489,6 +492,53 @@ helm uninstall --namespace gitlab-runners-namespace gitlab-runner
 
 **NOTA**: Cuando había un cambio de configuración en el `values.yaml`, salía más facil eliminar e instalar el Runner, `upgrade` también funcionaba pero yo prefería hacerlo eliminando/instalando.
 
+##### Permisos para GitLab Runner
+
+Se debe de crear un `ClusterRole` y un `ClusterRoleBinding` en Kubernetes para permitir desplegar en otros namespaces desde el namespace de gitlab, por lo que se crearon los siguientes archivos:
+
+Archivo `ClusterRole.yaml`
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: gitlab-runner
+  namespace: gitlab-runners-namespace
+rules:
+  - apiGroups: ["", "extensions", "apps"]
+    resources: ["services", "deployments", "replicasets", "pods", "configmap"]
+    verbs: ["get", "list", "create", "watch", "delete", "update"]
+```
+
+Archivo `ClusterRolBinding.yaml`
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: gitlab-runner
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: gitlab-runner
+subjects:
+  - namespace: gitlab-runners-namespace
+    kind: ServiceAccount
+    name: gitlab-runner
+```
+
+Aplicar los permisos en el siguiente orden:
+
+```shell
+kubectl apply -f ClusterRole.yaml
+```
+
+y
+
+```shell
+kubectl apply -f ClusterRolBinding.yaml
+```
+
 ##### Revisión
 
 Si todo ha transcurrido con normalidad entonces se podría ver el siguiente estado del agente:
@@ -528,14 +578,6 @@ git checkout -b feature/fun_14 && git push -u origin feature/fun_14
 
 ```shell
 kubectl get pods --namespace gitlab-runners-namespace
-```
-
-```shell
-
-```
-
-```shell
-
 ```
 
 # Referencias

@@ -6,20 +6,6 @@ stages:
 .print_vars:
   stage: integration
   script:
-    - echo "$CI_COMMIT_BRANCH"
-    - echo "$CI_COMMIT_REF_NAME"
-    - echo "$CI_DEFAULT_BRANCH"
-    - echo "$CI_OPEN_MERGE_REQUESTS"
-    - echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"
-    - echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_PROTECTED"
-    - echo "$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA"
-    - echo "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-    - echo "$CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED"
-    - echo "$CI_MERGE_REQUEST_TARGET_BRANCH_SHA"
-    - echo "$CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_NAME"
-    - echo "$CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_SHA"
-    - echo "$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME"
-    - echo "$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_SHA"
     - echo "GitLab CI/CD | Print all environment variables"
     - env
 
@@ -38,7 +24,7 @@ micro_agify_develop:
       when: never
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
       changes:
-        - micro_agify/**/*
+        - $MICRO_PATH/**/*
 
 micro_agify_main:
   stage: integration
@@ -54,7 +40,7 @@ micro_agify_main:
       when: never
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
       changes:
-        - micro_agify/**/*
+        - $MICRO_PATH/**/*
 
 micro_agify_feature:
   stage: feature
@@ -69,7 +55,7 @@ micro_agify_feature:
       when: never
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
-        - micro_agify/**/*
+        - $MICRO_PATH/**/*
     - when: never
 
 micro_agify_merge_request:
@@ -82,7 +68,7 @@ micro_agify_merge_request:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
-        - micro_agify/**/*
+        - $MICRO_PATH/**/*
 
 # GENDERIZE
 micro_genderize_develop:
@@ -99,7 +85,7 @@ micro_genderize_develop:
       when: never
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
       changes:
-        - micro_genderize/**/*
+        - $MICRO_PATH/**/*
 
 micro_genderize_main:
   stage: integration
@@ -115,7 +101,7 @@ micro_genderize_main:
       when: never
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
       changes:
-        - micro_genderize/**/*
+        - $MICRO_PATH/**/*
 
 micro_genderize_feature:
   stage: feature
@@ -130,7 +116,7 @@ micro_genderize_feature:
       when: never
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
-        - micro_genderize/**/*
+        - $MICRO_PATH/**/*
     - when: never
 
 micro_genderize_merge_request:
@@ -143,7 +129,7 @@ micro_genderize_merge_request:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
-        - micro_genderize/**/*
+        - $MICRO_PATH/**/*
 
 # MIDDLEWARE
 micro_middleware_develop:
@@ -160,7 +146,7 @@ micro_middleware_develop:
       when: never
     - if: $CI_COMMIT_BRANCH == $DEVELOP_BRANCH_NAME
       changes:
-        - middleware/**/*
+        - $MICRO_PATH/**/*
 
 micro_middleware_main:
   stage: integration
@@ -176,7 +162,7 @@ micro_middleware_main:
       when: never
     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH_NAME
       changes:
-        - middleware/**/*
+        - $MICRO_PATH/**/*
 
 micro_middleware_feature:
   stage: feature
@@ -191,7 +177,7 @@ micro_middleware_feature:
       when: never
     - if: $CI_COMMIT_BRANCH =~ /^(?i)(feature|feat)(.*)/
       changes:
-        - middleware/**/*
+        - $MICRO_PATH/**/*
     - when: never
 
 micro_middleware_merge_request:
@@ -204,4 +190,4 @@ micro_middleware_merge_request:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       changes:
-        - middleware/**/*
+        - $MICRO_PATH/**/*
