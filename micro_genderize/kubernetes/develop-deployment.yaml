@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro-genderize-deployment
+  labels:
+    app: micro-genderize
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: micro-genderize
+  template:
+    metadata:
+      labels:
+        app: micro-genderize
+    spec:
+      containers:
+        - name: micro-genderize
+          image: f64franco/micro-genderize:develop
+          ports:
+            - containerPort: 3000
+          env:
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "3000"
